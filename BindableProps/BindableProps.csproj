@@ -23,16 +23,22 @@
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageTags>source-generator maui</PackageTags>
 		<PackageProjectUrl>https://github.com/KafkaWannaFly/BindableProps</PackageProjectUrl>
-		<Version>1.0.0-beta</Version>
+		<Version>1.0.1-beta</Version>
 		<RepositoryUrl>https://github.com/KafkaWannaFly/BindableProps</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageIcon>lion.png</PackageIcon>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<None Include="..\LICENSE.txt">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\lion.png">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
 		</None>
 		<None Include="..\README.md">
 			<Pack>True</Pack>
