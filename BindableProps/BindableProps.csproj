@@ -17,11 +17,28 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<Title>BindableProps</Title>
-		<Authors>Kafka Wanna Fly</Authors>
+		<Authors>KafkaWannaFly</Authors>
 		<Description>Auto generate boilerplate code when declaring BindableProperty</Description>
 		<Copyright>MIT</Copyright>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageTags>source-generator maui</PackageTags>
+		<PackageProjectUrl>https://github.com/KafkaWannaFly/BindableProps</PackageProjectUrl>
+		<Version>1.0.0-beta</Version>
+		<RepositoryUrl>https://github.com/KafkaWannaFly/BindableProps</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\LICENSE.txt">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\BindablePropsSG\BindablePropsSG.csproj" PrivateAssets="contentfiles;build" SetTargetFramework="TargetFramework=netstandard2.0" />
