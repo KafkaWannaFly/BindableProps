@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BindablePropsSG", "Bindable
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BindableProps", "BindableProps\BindableProps.csproj", "{C820A39C-9A1C-460F-84AE-4BFCD29D7FE4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{345DB58D-6943-49E8-AFC9-1427313EC449}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C820A39C-9A1C-460F-84AE-4BFCD29D7FE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C820A39C-9A1C-460F-84AE-4BFCD29D7FE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C820A39C-9A1C-460F-84AE-4BFCD29D7FE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{345DB58D-6943-49E8-AFC9-1427313EC449}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{345DB58D-6943-49E8-AFC9-1427313EC449}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{345DB58D-6943-49E8-AFC9-1427313EC449}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{345DB58D-6943-49E8-AFC9-1427313EC449}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
