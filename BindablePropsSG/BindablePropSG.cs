@@ -1,184 +1,225 @@
-﻿//using Microsoft.CodeAnalysis;
-//using Microsoft.CodeAnalysis.CSharp.Syntax;
-//using Microsoft.CodeAnalysis.Text;
-//using System.Text;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Immutable;
+using System.Text;
 
-//namespace BindablePropsSG
-//{
+namespace BindablePropsSG
+{
+    [Generator]
+    public class BindablePropSG : IIncrementalGenerator
+    {
+        public void Initialize(IncrementalGeneratorInitializationContext context)
+        {
 
-//    [Generator]
-//    public class BindablePropSG : ISourceGenerator
-//    {
-//        public void Initialize(GeneratorInitializationContext context)
-//        {
-//            //#if DEBUG
-//            //            if (!Debugger.IsAttached)
-//            //            {
-//            //                Debugger.Launch();
-//            //            }
-//            //#endif
+            var fieldTypes = context.SyntaxProvider
+                .CreateSyntaxProvider(
+                    predicate: IsBindableProp,
+                    transform: Transform
+                )
+                .Where(item => item is not (null, null))
+                .Collect();
 
-//            // Register a syntax receiver that will be created for each generation pass
-//            context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
-//        }
+            context.RegisterSourceOutput(fieldTypes, Execute);
+        }
 
-//        public void Execute(GeneratorExecutionContext context)
-//        {
-//            if (!(context.SyntaxContextReceiver is SyntaxReceiver receiver))
-//                return;
+        private bool IsBindableProp(SyntaxNode node, CancellationToken _)
+        {
+            if (node is not AttributeSyntax attributeSyntax)
+            {
+                return false;
+            }
 
-//            INamedTypeSymbol attributeSymbol = context.Compilation.GetTypeByMetadataName("BindableProps.BindableProp")!;
+            var name = ExtractName(attributeSyntax?.Name);
 
-//            // group the fields by class, and generate the source
-//            var groupList = receiver.Fields.GroupBy<IFieldSymbol, INamedTypeSymbol>(f => f.ContainingType, SymbolEqualityComparer.Default);
-//            foreach (IGrouping<INamedTypeSymbol, IFieldSymbol> group in groupList)
-//            {
-//                string classSource = ProcessClass(group.Key, group.ToList(), attributeSymbol, context);
-//                context.AddSource($"{group.Key.Name}.g.cs", SourceText.From(classSource, Encoding.UTF8));
+            return name is "BindableProp" or "BindablePropAttribute";
+        }
 
-//            }
-//        }
+        private (FieldDeclarationSyntax?, IFieldSymbol?) Transform(GeneratorSyntaxContext context, CancellationToken cancellationToken)
+        {
+            var attributeSyntax = (AttributeSyntax)context.Node;
 
-//        private string ProcessClass(INamedTypeSymbol classSymbol, List<IFieldSymbol> fields, ISymbol attributeSymbol, GeneratorExecutionContext context)
-//        {
-//            if (!classSymbol.ContainingSymbol.Equals(classSymbol.ContainingNamespace, SymbolEqualityComparer.Default))
-//            {
-//                return String.Empty; //TODO: issue a diagnostic that it must be top level
-//            }
+            // Attribute --> AttributeList --> Field
+            if (attributeSyntax.Parent?.Parent is not FieldDeclarationSyntax fieldSyntax)
+                return (null, null);
+            
+            var fieldSymbol = context.SemanticModel.GetDeclaredSymbol(fieldSyntax.Declaration.Variables.FirstOrDefault()!) as IFieldSymbol;
 
-//            string namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
+            return (fieldSyntax, fieldSymbol);
+        }
 
-//            // begin building the generated source
-//            StringBuilder source = new StringBuilder($@"
-//namespace {namespaceName}
-//{{
-//    public partial class {classSymbol.Name}
-//    {{
-//");
+        private void Execute(SourceProductionContext context, ImmutableArray<(FieldDeclarationSyntax?, IFieldSymbol?)> fieldSyntaxesAndSymbols)
+        {
+            if (fieldSyntaxesAndSymbols.IsDefaultOrEmpty)
+                return;
 
-//            // create properties for each field 
-//            foreach (IFieldSymbol fieldSymbol in fields)
-//            {
-//                ProcessField(source, fieldSymbol, attributeSymbol, classSymbol);
-//            }
+            var groupList = fieldSyntaxesAndSymbols.GroupBy<(FieldDeclarationSyntax, IFieldSymbol), ClassDeclarationSyntax>(
+                    fieldGroup => (ClassDeclarationSyntax)fieldGroup.Item1!.Parent!
+                );
 
-//            source.Append(@"
-//    }
-//}
-//");
-//            return source.ToString();
-//        }
+            foreach (var group in groupList)
+            {
+                string sourceCode = ProcessClass(group.Key, group.ToList());
+                var className = group.Key.Identifier;
 
-//        private void ProcessField(StringBuilder source, IFieldSymbol fieldSymbol, ISymbol attributeSymbol, INamedTypeSymbol classSymbol)
-//        {
-//            // get the name and type of the field
-//            string fieldName = fieldSymbol.Name;
-//            var propName = PascalCaseOf(fieldName);
+                context.AddSource($"{className}.g.cs", sourceCode);
+            }
+        }
 
-//            if (propName.Length == 0 || propName == fieldName)
-//            {
-//                return;
-//            }
+        private string ProcessClass(ClassDeclarationSyntax classSyntax, List<(FieldDeclarationSyntax, IFieldSymbol)> fieldGroup)
+        {
+            if (classSyntax is null)
+            {
+                return String.Empty;
+            }
 
-//            ITypeSymbol fieldType = fieldSymbol.Type;
+            var usingDirectives = classSyntax.SyntaxTree.GetCompilationUnitRoot().Usings;
 
-//            var attributeParamGroups = fieldSymbol.GetAttributes()
-//                .Single(ad => ad?.AttributeClass?.Equals(attributeSymbol, SymbolEqualityComparer.Default) ?? false)
-//                .NamedArguments;
+            var namespaceSyntax = classSyntax.Parent as NamespaceDeclarationSyntax;
+            var namespaceName = namespaceSyntax?.Name?.ToString() ?? "global";
+            
+            var source = new StringBuilder($@"
+{usingDirectives}
 
-//            var defaultBindingMode = attributeParamGroups.SingleOrDefault(kvp => kvp.Key == "DefaultBindingMode").Value;
-//            var validateValueDelegate = attributeParamGroups.SingleOrDefault(kvp => kvp.Key == "ValidateValueDelegate").Value;
-//            var propertyChangedDelegate = attributeParamGroups.SingleOrDefault(kvp => kvp.Key == "PropertyChangedDelegate").Value;
-//            var propertyChangingDelegate = attributeParamGroups.SingleOrDefault(kvp => kvp.Key == "PropertyChangingDelegate").Value;
-//            var coerceValueDelegate = attributeParamGroups.SingleOrDefault(kvp => kvp.Key == "CoerceValueDelegate").Value;
-//            var createDefaultValueDelegate = attributeParamGroups.SingleOrDefault(kvp => kvp.Key == "CreateDefaultValueDelegate").Value;
+namespace {namespaceName}
+{{
+    public partial class {classSyntax.Identifier}
+    {{
+");
 
+            // create properties for each field 
+            foreach (var (fieldSynTax, fieldSymbol) in fieldGroup)
+            {
+                ProcessField(source, classSyntax, fieldSynTax, fieldSymbol);
+            }
 
-//            source.Append($@"
-//        public static readonly BindableProperty {propName}Property = BindableProperty.Create(
-//            nameof({propName}),
-//            typeof({fieldType.ToDisplayString()}),
-//            typeof({classSymbol.Name}),
-//			{GetFieldInitValue(fieldSymbol) ?? "default"},
-//            (BindingMode){(!defaultBindingMode.IsNull ? defaultBindingMode.Value!.ToString() : "0")},
-//            {(!validateValueDelegate.IsNull ? validateValueDelegate.Value!.ToString() : "null")},
-//            {(!propertyChangedDelegate.IsNull ? propertyChangedDelegate.Value!.ToString() : "null")},         
-//            {(!propertyChangingDelegate.IsNull ? propertyChangingDelegate.Value!.ToString() : "null")},
-//            {(!coerceValueDelegate.IsNull ? coerceValueDelegate.Value!.ToString() : "null")},
-//            {(!createDefaultValueDelegate.IsNull ? createDefaultValueDelegate.Value!.ToString() : "null")}
-//        );
+            source.Append(@$"
+    }}
+}}
+");
+            return source.ToString();
+        }
 
-//        public {fieldType.ToDisplayString()} {propName}
-//        {{
-//            get => {fieldName};
-//            set 
-//            {{ 
-//                {fieldName} = value;
-//                SetValue({classSymbol.Name}.{propName}Property, {fieldName});
-//            }}
-//        }}
-//");
-//        }
+        private void ProcessField(StringBuilder source, ClassDeclarationSyntax classSyntax, FieldDeclarationSyntax fieldSyntax, IFieldSymbol fieldSymbol)
+        {
+            var fieldName = fieldSymbol.Name;
+            var propName = PascalCaseOf(fieldName);
 
-//        SyntaxNode GetNode(SyntaxTree tree, int lineNumber)
-//        {
-//            var lineSpan = tree.GetText().Lines[lineNumber].Span;
-//            return tree.GetRoot().DescendantNodes(lineSpan)
-//                .First(n => lineSpan.Contains(n.Span));
-//        }
+            if (propName.Length == 0 || propName == fieldName)
+            {
+                return;
+            }
 
-//        string GetFieldInitValue(IFieldSymbol fieldSymbol)
-//        {
-//            return GetNode(
-//                    fieldSymbol.DeclaringSyntaxReferences.FirstOrDefault()!.SyntaxTree,
-//                    fieldSymbol.Locations.FirstOrDefault()!.GetLineSpan().StartLinePosition.Line
-//                )
-//                ?.DescendantNodesAndSelf()
-//                ?.OfType<VariableDeclarationSyntax>()
-//                ?.FirstOrDefault()
-//                ?.Variables
-//                .FirstOrDefault()
-//                ?.Initializer
-//                ?.Value
-//                ?.ToString() ?? String.Empty;
-//        }
+            var fieldType = fieldSyntax.Declaration.Type;
 
-//        string PascalCaseOf(string fieldName)
-//        {
-//            fieldName = fieldName.TrimStart('_');
-//            if (fieldName.Length == 0)
-//                return string.Empty;
+            var className = classSyntax.Identifier;
 
-//            if (fieldName.Length == 1)
-//                return fieldName.ToUpper();
+            var defaultFieldValue = GetFieldDefaultValue(fieldSyntax) ?? "default";
 
-//            return fieldName.Substring(0, 1).ToUpper() + fieldName.Substring(1);
-//        }
-//    }
+            var attributeSyntax = GetAttributeByName(fieldSyntax, "BindableProp");
 
-//    class SyntaxReceiver : ISyntaxContextReceiver
-//    {
-//        public List<IFieldSymbol> Fields { get; } = new List<IFieldSymbol>();
+            var attributeArguments = attributeSyntax?.ArgumentList?.Arguments;
 
-//        /// <summary>
-//        /// Called for every syntax node in the compilation, we can inspect the nodes and save any information useful for generation
-//        /// </summary>
-//        public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
-//        {
-//            // any field with at least one attribute is a candidate for property generation
-//            if (context.Node is FieldDeclarationSyntax fieldDeclarationSyntax
-//                && fieldDeclarationSyntax.AttributeLists.Count > 0)
-//            {
-//                foreach (VariableDeclaratorSyntax variable in fieldDeclarationSyntax.Declaration.Variables)
-//                {
-//                    // Get the symbol being declared by the field, and keep it if its annotated
-//                    IFieldSymbol? fieldSymbol = context.SemanticModel.GetDeclaredSymbol(variable) as IFieldSymbol;
-//                    if (fieldSymbol?.GetAttributes().Any(ad => ad.AttributeClass?.ToDisplayString() == "BindableProps.BindableProp") ?? false)
-//                    {
-//                        Fields.Add(fieldSymbol);
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
+            var defaultBindingMode = GetAttributeParam(attributeArguments, "DefaultBindingMode") ?? "BindingMode.Default";
+
+            var validateValueDelegate = GetAttributeParam(attributeArguments, "ValidateValueDelegate") ?? "null";
+
+            var propertyChangedDelegate = GetAttributeParam(attributeArguments, "PropertyChangedDelegate") ?? "null";
+
+            var propertyChangingDelegate = GetAttributeParam(attributeArguments, "PropertyChangingDelegate") ?? "null";
+
+            var coerceValueDelegate = GetAttributeParam(attributeArguments, "CoerceValueDelegate") ?? "null";
+
+            var createDefaultValueDelegate = GetAttributeParam(attributeArguments, "CreateDefaultValueDelegate") ?? "null";
+
+            source.Append($@"
+        public static readonly BindableProperty {propName}Property = BindableProperty.Create(
+            nameof({propName}),
+            typeof({fieldType}),
+            typeof({className}),
+            {defaultFieldValue},
+            {defaultBindingMode},
+            {validateValueDelegate},
+            {propertyChangedDelegate},
+            {propertyChangingDelegate},
+            {coerceValueDelegate},
+            {createDefaultValueDelegate}
+        );
+
+        public {fieldType} {propName}
+        {{
+            get => {fieldName};
+            set 
+            {{ 
+                {fieldName} = value;
+                SetValue({className}.{propName}Property, {fieldName});
+            }}
+        }}
+");
+        }
+
+        string PascalCaseOf(string fieldName)
+        {
+            fieldName = fieldName.TrimStart('_');
+            if (fieldName.Length == 0)
+                return string.Empty;
+
+            if (fieldName.Length == 1)
+                return fieldName.ToUpper();
+
+            return fieldName.Substring(0, 1).ToUpper() + fieldName.Substring(1);
+        }
+
+        string? ExtractName(NameSyntax? name)
+        {
+            return name switch
+            {
+                SimpleNameSyntax ins => ins.Identifier.Text,
+                QualifiedNameSyntax qns => qns.Right.Identifier.Text,
+                _ => null
+            };
+        }
+
+        string? GetAttributeParam(SeparatedSyntaxList<AttributeArgumentSyntax>? attributeArguments, string paramName)
+        {
+            var paramSyntax = attributeArguments?.FirstOrDefault(
+                attrArg => attrArg?.NameEquals?.Name.Identifier.Text == paramName
+            );
+
+            if (paramSyntax?.Expression is InvocationExpressionSyntax invocationExpressionSyntax)
+            {
+                return invocationExpressionSyntax.ArgumentList.Arguments.FirstOrDefault()?.ToString();
+            }
+            else if (paramSyntax?.Expression is LiteralExpressionSyntax literalExpressionSyntax)
+            {
+                return literalExpressionSyntax.Token.Value?.ToString();
+            }
+            
+            return paramSyntax?.Expression.ToString();
+        }
+
+        string? GetFieldDefaultValue(FieldDeclarationSyntax fieldSyntax)
+        {
+            var variableDeclaration = fieldSyntax.DescendantNodesAndSelf()
+                .OfType<VariableDeclarationSyntax>()
+                .FirstOrDefault();
+            var variableDeclarator = variableDeclaration?.Variables.FirstOrDefault();
+            var initializer = variableDeclarator?.Initializer;
+            return initializer?.Value?.ToString();
+        }
+
+        AttributeSyntax? GetAttributeByName(FieldDeclarationSyntax fieldSyntax, string attributeName)
+        {
+            var attributeSyntax = fieldSyntax.AttributeLists
+                .FirstOrDefault(attrList =>
+                {
+                    var attr = attrList.Attributes.FirstOrDefault();
+                    return attr is not null && ExtractName(attr.Name) == attributeName;
+                })
+                ?.Attributes
+                .FirstOrDefault();
+
+            return attributeSyntax;
+        }
+    }
+}

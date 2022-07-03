@@ -81,7 +81,7 @@ static (ImmutableArray<Diagnostic>, string) GetGeneratedOutput(string source)
 //     return (diagnostics, "");
 // }
 
-    var generator = new BindablePropSGv2();
+    var generator = new BindablePropSG();
 
     var driver = CSharpGeneratorDriver.Create(generator);
     driver.RunGeneratorsAndUpdateCompilation(compilation, out var outputCompilation, out var generateDiagnostics);
