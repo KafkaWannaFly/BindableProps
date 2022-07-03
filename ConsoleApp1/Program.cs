@@ -9,33 +9,21 @@ using BindableProps;
 
 
 string source = @"
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis;
-using System.Collections.Immutable;
-using System.Reflection.Emit;
-using System.Reflection;
-using BindablePropsSG;
 using BindableProps;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MyNamespace
+namespace ConsoleApp1
 {
-    public partial class MyClass
+    public partial class MyComponent
     {
-        [BindableProps.BindableProp]
-        string myName = ""Kafka Wanna Fly"";
+        [BindableProp(ValidateValueDelegate = nameof(doSomething))]
+        string title = ""Thou hast made me endless"";
 
-        [BindableProp]
-        int age = 200;
-
-        [BindableProp(
-        DefaultBindingMode = BindingMode.TwoWay, 
-        ValidateValueDelegate = nameof(ValidateValue), 
-        PropertyChangedDelegate = ""OnPropChanged"", 
-        PropertyChangingDelegate = nameof(PropertyChanging),
-        CoerceValueDelegate = ""CoerceValue"",
-        CreateDefaultValueDelegate = nameof(CreateDefaultValue)
-        )]
-        float height = 1.7;
+        void doSomething() { }
     }
 }
 ";

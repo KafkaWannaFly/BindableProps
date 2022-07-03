@@ -8,9 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BindablePropsSG\BindablePropsSG.csproj" 
+    <!--<ProjectReference Include="..\BindablePropsSG\BindablePropsSG.csproj" 
 					  ReferenceOutputAssembly="false"
-					  OutputItemType="Analyzer" />
+					  OutputItemType="Analyzer" />-->
+	  <ProjectReference Include="..\BindablePropsSG\BindablePropsSG.csproj" />
     <ProjectReference Include="..\BindableProps\BindableProps.csproj" />
   </ItemGroup>
 

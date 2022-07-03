@@ -74,8 +74,8 @@ namespace BindablePropsSG
             }
 
             var usingDirectives = classSyntax.SyntaxTree.GetCompilationUnitRoot().Usings;
-
-            var namespaceSyntax = classSyntax.Parent as NamespaceDeclarationSyntax;
+            
+            var namespaceSyntax = classSyntax.Parent as BaseNamespaceDeclarationSyntax;
             var namespaceName = namespaceSyntax?.Name?.ToString() ?? "global";
             
             var source = new StringBuilder($@"
