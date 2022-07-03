@@ -21,9 +21,9 @@
 		<Description>Auto generate boilerplate code when declaring BindableProperty</Description>
 		<Copyright>MIT</Copyright>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-		<PackageTags>source-generator maui</PackageTags>
+		<PackageTags>source-generator;maui</PackageTags>
 		<PackageProjectUrl>https://github.com/KafkaWannaFly/BindableProps</PackageProjectUrl>
-		<Version>1.0.1-beta</Version>
+		<Version>1.0.3-beta</Version>
 		<RepositoryUrl>https://github.com/KafkaWannaFly/BindableProps</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
@@ -47,6 +47,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\BindablePropsSG\BindablePropsSG.csproj" PrivateAssets="contentfiles;build" SetTargetFramework="TargetFramework=netstandard2.0" />
+		<ProjectReference Include="..\BindablePropsSG\BindablePropsSG.csproj" 
+						  PrivateAssets="contentfiles;build" 
+						  SetTargetFramework="TargetFramework=netstandard2.0" 
+						  ReferenceOutputAssembly="false" />
 	</ItemGroup>
+
+	<ItemGroup Label="Package">
+		<None Include="..\BindablePropsSG\bin\$(Configuration)\netstandard2.0\BindablePropsSG.dll"
+          PackagePath="analyzers\dotnet\cs"
+          Pack="true"
+          Visible="false" />
+	</ItemGroup>
+
+	<!-- Enable trimming support on .NET 6 -->
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
+		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+		<IsTrimmable>true</IsTrimmable>
+	</PropertyGroup>
 </Project>
