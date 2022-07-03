@@ -1,0 +1,23 @@
+# https://github.com/marketplace/actions/publish-nuget
+name: Publish to Nuget
+on:
+  push:
+    branches:
+      - master
+jobs:
+  publish:
+    name: Build, Pack & Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # Dotnet 6 is pre-installed in this machine
+
+      # Publish
+      - name: Publish on Version Change
+        id: publish_nuget
+        uses: brandedoutcast/publish-nuget@v2
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: BindableProps/BindableProps.csproj
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
