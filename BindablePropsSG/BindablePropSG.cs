@@ -120,7 +120,7 @@ namespace {namespaceName}
 
             var attributeArguments = attributeSyntax?.ArgumentList?.Arguments;
 
-            var defaultBindingMode = GetAttributeParam(attributeArguments, "DefaultBindingMode") ?? "BindingMode.Default";
+            var defaultBindingMode = GetAttributeParam(attributeArguments, "DefaultBindingMode") ?? "0";
 
             var validateValueDelegate = GetAttributeParam(attributeArguments, "ValidateValueDelegate") ?? "null";
 
@@ -138,7 +138,7 @@ namespace {namespaceName}
             typeof({fieldType}),
             typeof({className}),
             {defaultFieldValue},
-            {defaultBindingMode},
+            (BindingMode){defaultBindingMode},
             {validateValueDelegate},
             {propertyChangedDelegate},
             {propertyChangingDelegate},
