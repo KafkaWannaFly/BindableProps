@@ -10,20 +10,33 @@ using BindableProps;
 
 string source = @"
 using BindableProps;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ConsoleApp1
+namespace WibuTube.Controls;
+
+public partial class TextInput : ContentView
 {
-    public partial class MyComponent
-    {
-        [BindableProp(ValidateValueDelegate = nameof(doSomething))]
-        string title = ""Thou hast made me endless"";
+    [BindableProp]
+    string text = String.Empty;
 
-        void doSomething() { }
+    [BindableProp]
+    string placeHolder = String.Empty;
+
+
+    public TextInput()
+    {
+        InitializeComponent();
+
+        Content = new Border()
+        {
+            BindingContext = this,
+            Content = new Entry()
+            {
+                ClearButtonVisibility = ClearButtonVisibility.WhileEditing,
+                VerticalTextAlignment = TextAlignment.Center,
+            }
+            .Bind(Entry.TextProperty, nameof(Text))
+            .Bind(Entry.PlaceholderProperty, nameof(PlaceHolder))
+        };
     }
 }
 ";
