@@ -242,6 +242,24 @@ public partial class TextInput
 
 
 
+Finally, you can use your component in other page/view like a normal component. For example, at `MainPage.xaml`:
+
+```xaml
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MyMauiApp.ViewModels"
+             xmlns:controls="clr-namespace:MyMauiApp.Controls"
+             x:Class="MyMauiApp.MainPage"
+             x:DataType="vm:MainPageViewModel">
+    
+    <controls:TextInput PlaceHolder="Say you do"
+                        Text="{Binding MyLoveStory, Mode=TwoWay}" />
+</ContentPage>
+```
+
+
+
 ## Roadmap
 
 The `BindableProp` along is just not enough for covering all use-cases of `BindableProperty`. Planning features:

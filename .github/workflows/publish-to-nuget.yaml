@@ -18,7 +18,7 @@ jobs:
       # Publish
       - name: Publish on Version Change
         id: publish_nuget
-        uses: alirezanet/publish-nuget@v3.0.0
+        uses: brandedoutcast/publish-nuget@v2
         with:
           # Filepath of the project to be packaged, relative to root of repository
           PROJECT_FILE_PATH: BindableProps/BindableProps.csproj
