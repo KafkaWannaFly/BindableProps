@@ -1,10 +1,11 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using BindablePropsSG.Utils;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Immutable;
 using System.Text;
 
-namespace BindablePropsSG
+namespace BindablePropsSG.Generators
 {
     [Generator]
     public class BindablePropSG : IIncrementalGenerator
@@ -12,7 +13,7 @@ namespace BindablePropsSG
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
 
-            var fieldTypes = context.SyntaxProvider
+            var fieldGroups = context.SyntaxProvider
                 .CreateSyntaxProvider(
                     predicate: IsBindableProp,
                     transform: Transform
@@ -20,7 +21,7 @@ namespace BindablePropsSG
                 .Where(item => item is not (null, null))
                 .Collect();
 
-            context.RegisterSourceOutput(fieldTypes, Execute);
+            context.RegisterSourceOutput(fieldGroups, Execute);
         }
 
         private bool IsBindableProp(SyntaxNode node, CancellationToken _)
@@ -30,7 +31,7 @@ namespace BindablePropsSG
                 return false;
             }
 
-            var name = ExtractName(attributeSyntax?.Name);
+            var name = SyntaxUtil.ExtractName(attributeSyntax?.Name);
 
             return name is "BindableProp" or "BindablePropAttribute";
         }
@@ -42,7 +43,7 @@ namespace BindablePropsSG
             // Attribute --> AttributeList --> Field
             if (attributeSyntax.Parent?.Parent is not FieldDeclarationSyntax fieldSyntax)
                 return (null, null);
-            
+
             var fieldSymbol = context.SemanticModel.GetDeclaredSymbol(fieldSyntax.Declaration.Variables.FirstOrDefault()!) as IFieldSymbol;
 
             return (fieldSyntax, fieldSymbol);
@@ -62,7 +63,7 @@ namespace BindablePropsSG
                 string sourceCode = ProcessClass(group.Key, group.ToList());
                 var className = group.Key.Identifier;
 
-                context.AddSource($"{className}.g.cs", sourceCode);
+                context.AddSource($"{className}.BindableProp.g.cs", sourceCode);
             }
         }
 
@@ -70,14 +71,14 @@ namespace BindablePropsSG
         {
             if (classSyntax is null)
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             var usingDirectives = classSyntax.SyntaxTree.GetCompilationUnitRoot().Usings;
-            
+
             var namespaceSyntax = classSyntax.Parent as BaseNamespaceDeclarationSyntax;
             var namespaceName = namespaceSyntax?.Name?.ToString() ?? "global";
-            
+
             var source = new StringBuilder($@"
 {usingDirectives}
 
@@ -103,7 +104,7 @@ namespace {namespaceName}
         private void ProcessField(StringBuilder source, ClassDeclarationSyntax classSyntax, FieldDeclarationSyntax fieldSyntax, IFieldSymbol fieldSymbol)
         {
             var fieldName = fieldSymbol.Name;
-            var propName = PascalCaseOf(fieldName);
+            var propName = StringUtil.PascalCaseOf(fieldName);
 
             if (propName.Length == 0 || propName == fieldName)
             {
@@ -158,28 +159,6 @@ namespace {namespaceName}
 ");
         }
 
-        string PascalCaseOf(string fieldName)
-        {
-            fieldName = fieldName.TrimStart('_');
-            if (fieldName.Length == 0)
-                return string.Empty;
-
-            if (fieldName.Length == 1)
-                return fieldName.ToUpper();
-
-            return fieldName.Substring(0, 1).ToUpper() + fieldName.Substring(1);
-        }
-
-        string? ExtractName(NameSyntax? name)
-        {
-            return name switch
-            {
-                SimpleNameSyntax ins => ins.Identifier.Text,
-                QualifiedNameSyntax qns => qns.Right.Identifier.Text,
-                _ => null
-            };
-        }
-
         string? GetAttributeParam(SeparatedSyntaxList<AttributeArgumentSyntax>? attributeArguments, string paramName)
         {
             var paramSyntax = attributeArguments?.FirstOrDefault(
@@ -194,7 +173,7 @@ namespace {namespaceName}
             {
                 return literalExpressionSyntax.Token.Value?.ToString();
             }
-            
+
             return paramSyntax?.Expression.ToString();
         }
 
@@ -214,7 +193,7 @@ namespace {namespaceName}
                 .FirstOrDefault(attrList =>
                 {
                     var attr = attrList.Attributes.FirstOrDefault();
-                    return attr is not null && ExtractName(attr.Name) == attributeName;
+                    return attr is not null && SyntaxUtil.ExtractName(attr.Name) == attributeName;
                 })
                 ?.Attributes
                 .FirstOrDefault();
