@@ -16,6 +16,7 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+
 		<Title>BindableProps</Title>
 		<Authors>KafkaWannaFly</Authors>
 		<Description>Auto generate boilerplate code when declaring BindableProperty</Description>
@@ -23,7 +24,7 @@
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 		<PackageTags>source-generator;maui</PackageTags>
 		<PackageProjectUrl>https://github.com/KafkaWannaFly/BindableProps</PackageProjectUrl>
-		<Version>1.0.7-beta</Version>
+		<Version>1.1.0-beta</Version>
 		<RepositoryUrl>https://github.com/KafkaWannaFly/BindableProps</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
@@ -37,8 +38,8 @@
 			<PackagePath>\</PackagePath>
 		</None>
 		<None Include="..\lion.png">
-		  <Pack>True</Pack>
-		  <PackagePath>\</PackagePath>
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
 		</None>
 		<None Include="..\README.md">
 			<Pack>True</Pack>
@@ -47,9 +48,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\BindablePropsSG\BindablePropsSG.csproj" 
-						  PrivateAssets="contentfiles;build" 
-						  SetTargetFramework="TargetFramework=netstandard2.0" 
+		<ProjectReference Include="..\BindablePropsSG\BindablePropsSG.csproj"
+						  PrivateAssets="contentfiles;build"
+						  SetTargetFramework="TargetFramework=netstandard2.0"
 						  ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
