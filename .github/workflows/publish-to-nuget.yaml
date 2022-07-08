@@ -7,13 +7,9 @@ on:
 jobs:
   publish:
     name: Build, Pack & Publish
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      # Dotnet 6 is pre-installed in this machine
-      - name: Install .NET MAUI
-        run: dotnet workload install maui
 
       # Publish
       - name: Publish on Version Change
