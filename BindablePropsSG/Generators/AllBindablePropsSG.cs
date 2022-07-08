@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 using System.Collections.Immutable;
 using System.Text;
 
@@ -14,7 +15,6 @@ namespace BindablePropsSG.Generators
         {
             "IgnoredProp", "BindableProp", "IgnoredPropAttribute", "BindablePropAttribute"
         };
-
 
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
@@ -77,7 +77,10 @@ namespace {namespaceName}
 
             foreach (var fieldSymbol in availableFieldSymbols)
             {
-                ProcessField(source, classSymbol, fieldSymbol);
+                if (fieldSymbol is null)
+                    continue;
+
+                ProcessField(source, classSyntax, classSymbol, fieldSymbol);
             }
 
             source.Append(@$"
@@ -90,23 +93,26 @@ namespace {namespaceName}
 
         private void ProcessField(
             StringBuilder source,
+            ClassDeclarationSyntax classDeclarationSyntax,
             INamedTypeSymbol classSymbol,
-            IFieldSymbol? symbol)
+            IFieldSymbol fieldSymbol)
         {
-            if (symbol is null)
-                return;
-
-            var fieldName = symbol.Name;
+            var fieldName = fieldSymbol.Name;
             var propName = StringUtil.PascalCaseOf(fieldName);
-            var dataType = symbol.Type;
+            var dataType = fieldSymbol.Type;
             var className = classSymbol.Name;
+
+            var syntax = SyntaxUtil.FindSyntaxBySymbol(classDeclarationSyntax, fieldSymbol) as VariableDeclaratorSyntax;
+            var defaultValue = syntax?.Initializer?
+                .Value
+                .ToString() ?? "default";
 
             source.Append($@"
         public static readonly BindableProperty {propName}Property = BindableProperty.Create(
                     nameof({propName}),
                     typeof({dataType}),
                     typeof({className}),
-                    default
+                    {defaultValue}
                 );
 
         public {dataType} {propName}

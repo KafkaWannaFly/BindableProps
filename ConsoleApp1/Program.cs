@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using BindableProps;
 using BindablePropsSG;
+using BindablePropsSG.Generators;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Collections.Immutable;
@@ -15,15 +16,19 @@ namespace WibuTube.Controls;
 [AllBindableProps]
 public partial class TextInput : ContentView
 {
-    string text = String.Empty;
+    string text = ""123"";
 
     string placeHolder = String.Empty;
 
     [BindableProp]
     int age = 0;
 
-    [IgnoreProp]
-    float _count = 5;
+    float _count;
+
+    readonly List<string> ignoredAttributes = new()
+            {
+                ""IgnoredProp"", ""BindableProp"", ""IgnoredPropAttribute"", ""BindablePropAttribute""
+            };
 
 
     public TextInput()

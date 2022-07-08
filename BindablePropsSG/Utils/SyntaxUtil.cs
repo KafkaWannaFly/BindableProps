@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -63,6 +64,14 @@ namespace BindablePropsSG.Utils
                 .Count(node => node is TypeParameterSyntax) ?? 0;
             if (typeArguments != 0)
                 builder.Append(".").Append(typeArguments);
+        }
+
+        public static SyntaxNode? FindSyntaxBySymbol(SyntaxNode syntaxNode, ISymbol symbol)
+        {
+            var span = symbol.Locations.FirstOrDefault()!.SourceSpan;
+            var syntax = syntaxNode.FindNode(span);
+
+            return syntax;
         }
     }
 }
