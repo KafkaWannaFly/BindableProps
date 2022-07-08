@@ -23,12 +23,22 @@ public partial class TextInput : ContentView
     [BindableProp]
     int age = 0;
 
-    float _count;
+    public string Text
+        {
+            get => text;
+            set 
+            { 
+                text = value;
+                SetValue(TextInput.TextProperty, text);
+            }
+        }
 
-    readonly List<string> ignoredAttributes = new()
-            {
-                ""IgnoredProp"", ""BindableProp"", ""IgnoredPropAttribute"", ""BindablePropAttribute""
-            };
+    public static readonly BindableProperty PlaceHolderProperty = BindableProperty.Create(
+                nameof(PlaceHolder),
+                typeof(string),
+                typeof(TextInput),
+                new string(""asdsad"")
+            );
 
 
     public TextInput()

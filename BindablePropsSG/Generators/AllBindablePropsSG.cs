@@ -54,7 +54,8 @@ namespace BindablePropsSG.Generators
                     symbol,
                     ignoredAttributes)
                 )
-                .Select(item => item as IFieldSymbol);
+                .Select(item => item as IFieldSymbol)
+                .Where(item => item is not null && !item.IsStatic);
 
             if (availableFieldSymbols is null || availableFieldSymbols.Count() == 0)
             {
