@@ -6,19 +6,6 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
-
-		<Title>BindablePropsSG</Title>
-		<Authors>KafkaWannaFly</Authors>
-		<Description>Auto generate boilerplate code when declaring BindableProperty</Description>
-		<Copyright>MIT</Copyright>
-		<PackageTags>source-generator maui</PackageTags>
-		<PackageProjectUrl>https://github.com/KafkaWannaFly/BindableProps</PackageProjectUrl>
-		<Version>1.0.0</Version>
-		<RepositoryUrl>https://github.com/KafkaWannaFly/BindableProps</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageIcon>lion.png</PackageIcon>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 	</PropertyGroup>
 
 	<ItemGroup>

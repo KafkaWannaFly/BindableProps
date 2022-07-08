@@ -6,7 +6,7 @@
 
 This library helps you to reduce writing boilerplate code when creating your custom UI components.
 
-## Example Usage
+## `BindableProp` - Basic Usage
 
 Let say you want to create your own text input. Here's how it looks:
 
@@ -260,15 +260,118 @@ Finally, you can use your component in other page/view like a normal component. 
 
 
 
+## `AllBindableProps` and `IgnoredProp`
+
+If you just need the default setting for all of your props, try this:
+
+```c#
+[AllBindableProps]
+public partial class TextInput : ContentView
+{
+    // Default field
+    string text;
+
+    // Support field with a default value
+    string placeHolder = "Do you trust me?";
+
+    // This field will be handled by BindableProp
+    [BindableProp(
+        DefaultBindingMode = (int)BindingMode.TwoWay,
+        ValidateValueDelegate = nameof(ValidateValue)
+        )]
+    string message = "With every cell in my body!";
+
+    [IgnoredProp]
+    bool isBusy; // Don't touch!
+
+    // If you have existing props, we don't touch them
+    public static readonly BindableProperty ErrorProperty = BindableProperty.Create(
+            nameof(Error),
+            typeof(string),
+            typeof(TextInput),
+            "Things just get out of hand",
+            (BindingMode)(int)BindingMode.OneWayToSource
+        );
+
+    // Also not touch this prop
+    public string Error
+    {
+        get => (string)GetValue(TextInput.ErrorProperty);
+        set
+        {
+            SetValue(TextInput.ErrorProperty, value);
+        }
+    }
+
+    static bool ValidateValue(BindableObject bindable, object value)
+    {
+        return true;
+    }
+    
+    public TextInput()
+    {
+        InitializeComponent();
+    }
+}
+```
+
+And the result is:
+
+```c#
+namespace WibuTube.Controls
+{
+    public partial class TextInput
+    {
+
+        public static readonly BindableProperty TextProperty = BindableProperty.Create(
+                    nameof(Text),
+                    typeof(string),
+                    typeof(TextInput),
+                    default
+                );
+
+        public string Text
+        {
+            get => text;
+            set 
+            { 
+                text = value;
+                SetValue(TextInput.TextProperty, text);
+            }
+        }
+
+        public static readonly BindableProperty PlaceHolderProperty = BindableProperty.Create(
+                    nameof(PlaceHolder),
+                    typeof(string),
+                    typeof(TextInput),
+                    "Do you trust me?"
+                );
+
+        public string PlaceHolder
+        {
+            get => placeHolder;
+            set 
+            { 
+                placeHolder = value;
+                SetValue(TextInput.PlaceHolderProperty, placeHolder);
+            }
+        }
+
+    }
+}
+```
+
+
+
 ## Roadmap
 
 The `BindableProp` along is just not enough for covering all use-cases of `BindableProperty`. Planning features:
 
-| Attribute                      | Equivalent/Description                                       |
-| ------------------------------ | ------------------------------------------------------------ |
-| `BindableAttachedProp`         | `BindableProperty.CreateAttached`                            |
-| `BindableAttachedReadOnlyProp` | `BindablePropertyKey.CreateAttachedReadOnly`                 |
-| `BindableReadOnlyProp`         | `BindablePropertyKey.CreateReadOnly`                         |
-| `AllBindableProps`             | Put this to your class,<br />Default `BindableProp` to all field members |
-| `IgnoredProp`                  | `AllBindableProps` should ignore this field                  |
+| Attribute                      | Equivalent/Description                                       | Status    |
+| ------------------------------ | ------------------------------------------------------------ | --------- |
+| `BindableAttachedProp`         | `BindableProperty.CreateAttached`                            |           |
+| `BindableAttachedReadOnlyProp` | `BindablePropertyKey.CreateAttachedReadOnly`                 |           |
+| `BindableReadOnlyProp`         | `BindablePropertyKey.CreateReadOnly`                         |           |
+| `AllBindableProps`             | Put this to your class,<br />Default `BindableProp` to all field members | :ok_hand: |
+| `IgnoredProp`                  | `AllBindableProps` should ignore this field                  | :ok_hand: |
 
