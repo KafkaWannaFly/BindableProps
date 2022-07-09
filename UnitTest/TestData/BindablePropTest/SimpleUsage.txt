@@ -1,0 +1,11 @@
+﻿namespace UnitTest.TestData.BindablePropTest
+{
+    public partial class SimpleUsage
+    {
+        [BindableProp]
+        string title;
+
+        [BindableProp]
+        string description = "To the moon";
+    }
+}

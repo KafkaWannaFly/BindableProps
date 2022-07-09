@@ -5,7 +5,19 @@ on:
     branches:
       - master
 jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run unit tests
+        uses: zyborg/dotnet-tests-report@v1
+        with:
+          project_path: UnitTest/UnitTest.csproj
+          report_title: Unit Test Report
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          fail_build_on_failed_tests: true
+
   publish:
+    needs: unit-test
     name: Build, Pack & Publish
     runs-on: ubuntu-latest
     steps:

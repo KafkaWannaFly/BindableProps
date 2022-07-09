@@ -1,0 +1,46 @@
+﻿namespace UnitTest.TestData.BindablePropTest;
+
+public partial class MyClass
+{
+    // Create prop with a few settings
+    [BindableProp(DefaultBindingMode = ((int)BindingMode.TwoWay))]
+    string text = "From every time";
+
+    // Full setting
+    [BindableProp(
+        DefaultBindingMode = ((int)BindingMode.OneWay),
+        ValidateValueDelegate = nameof(ValidateValue),
+        PropertyChangedDelegate = nameof(PropertyChangedDelegate),
+        PropertyChangingDelegate = nameof(PropertyChangingDelegate),
+        CoerceValueDelegate = nameof(CoerceValueDelegate),
+        CreateDefaultValueDelegate = nameof(CreateDefaultValueDelegate)
+        )]
+    string placeHolder = "Always!";
+
+    static bool ValidateValue(BindableObject bindable, object value)
+    {
+        return true;
+    }
+
+    static void PropertyChangedDelegate(BindableObject bindable, object oldValue, object newValue)
+    {
+        // Do something
+    }
+
+    static void PropertyChangingDelegate(BindableObject bindable, object oldValue, object newValue)
+    {
+        // Do something
+    }
+
+    static object CoerceValueDelegate(BindableObject bindable, object value)
+    {
+        // Do something
+        return 0;
+    }
+
+    static object CreateDefaultValueDelegate(BindableObject bindable)
+    {
+        // Do something
+        return string.Empty;
+    }
+}
