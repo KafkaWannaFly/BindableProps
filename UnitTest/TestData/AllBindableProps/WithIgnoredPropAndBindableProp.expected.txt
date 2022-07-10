@@ -9,7 +9,9 @@ namespace global
                     nameof(Text),
                     typeof(string),
                     typeof(MyClass),
-                    default
+                    default,
+                    propertyChanged: (bindable, oldValue, newValue) =>
+                                    ((MyClass)bindable).Text = (string)newValue
                 );
 
         public string Text
@@ -17,8 +19,12 @@ namespace global
             get => text;
             set 
             { 
+                OnPropertyChanging(nameof(Text));
+
                 text = value;
                 SetValue(MyClass.TextProperty, text);
+
+                OnPropertyChanged(nameof(Text));
             }
         }
 
@@ -26,7 +32,9 @@ namespace global
                     nameof(PlaceHolder),
                     typeof(string),
                     typeof(MyClass),
-                    "Do you trust me?"
+                    "Do you trust me?",
+                    propertyChanged: (bindable, oldValue, newValue) =>
+                                    ((MyClass)bindable).PlaceHolder = (string)newValue
                 );
 
         public string PlaceHolder
@@ -34,8 +42,12 @@ namespace global
             get => placeHolder;
             set 
             { 
+                OnPropertyChanging(nameof(PlaceHolder));
+
                 placeHolder = value;
                 SetValue(MyClass.PlaceHolderProperty, placeHolder);
+
+                OnPropertyChanged(nameof(PlaceHolder));
             }
         }
 

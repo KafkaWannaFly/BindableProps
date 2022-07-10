@@ -11,7 +11,8 @@ namespace UnitTest.TestData.BindablePropTest
             default,
             (BindingMode)0,
             null,
-            null,
+            (bindable, oldValue, newValue) => 
+                        ((SimpleUsage)bindable).Title = (string)newValue,
             null,
             null,
             null
@@ -22,8 +23,12 @@ namespace UnitTest.TestData.BindablePropTest
             get => title;
             set 
             {
+                OnPropertyChanging(nameof(Title));
+
                 title = value;
                 SetValue(SimpleUsage.TitleProperty, title);
+
+                OnPropertyChanged(nameof(Title));
             }
         }
 
@@ -34,7 +39,8 @@ namespace UnitTest.TestData.BindablePropTest
             "To the moon",
             (BindingMode)0,
             null,
-            null,
+            (bindable, oldValue, newValue) => 
+                        ((SimpleUsage)bindable).Description = (string)newValue,
             null,
             null,
             null
@@ -45,8 +51,12 @@ namespace UnitTest.TestData.BindablePropTest
             get => description;
             set 
             {
+                OnPropertyChanging(nameof(Description));
+
                 description = value;
                 SetValue(SimpleUsage.DescriptionProperty, description);
+
+                OnPropertyChanged(nameof(Description));
             }
         }
     }

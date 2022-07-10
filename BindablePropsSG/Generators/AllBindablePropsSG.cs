@@ -14,7 +14,7 @@ namespace BindablePropsSG.Generators
             {
                 "IgnoredProp", "BindableProp", "IgnoredPropAttribute", "BindablePropAttribute"
             };
-        
+
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
             var classGroups = context.SyntaxProvider
@@ -113,7 +113,9 @@ namespace {namespaceName}
                     nameof({propName}),
                     typeof({dataType}),
                     typeof({className}),
-                    {defaultValue}
+                    {defaultValue},
+                    propertyChanged: (bindable, oldValue, newValue) =>
+                                    (({className})bindable).{propName} = ({dataType})newValue
                 );
 
         public {dataType} {propName}
@@ -121,8 +123,12 @@ namespace {namespaceName}
             get => {fieldName};
             set 
             {{ 
+                OnPropertyChanging(nameof({propName}));
+
                 {fieldName} = value;
                 SetValue({className}.{propName}Property, {fieldName});
+
+                OnPropertyChanged(nameof({propName}));
             }}
         }}
 ");
