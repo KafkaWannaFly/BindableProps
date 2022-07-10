@@ -88,9 +88,10 @@ namespace MyMauiApp.Controls
             typeof(string),
             typeof(TextInput),
             default,
-            BindingMode.Default,
+            (BindingMode)0,
             null,
-            null,
+            (bindable, oldValue, newValue) => 
+                        ((TextInput)bindable).Text = (string)newValue,
             null,
             null,
             null
@@ -101,8 +102,12 @@ namespace MyMauiApp.Controls
             get => text;
             set 
             { 
+                OnPropertyChanging(nameof(Text));
+
                 text = value;
                 SetValue(TextInput.TextProperty, text);
+
+                OnPropertyChanged(nameof(Text));
             }
         }
 
@@ -111,9 +116,10 @@ namespace MyMauiApp.Controls
             typeof(string),
             typeof(TextInput),
             default,
-            BindingMode.Default,
+            (BindingMode)0,
             null,
-            null,
+            (bindable, oldValue, newValue) => 
+                        ((TextInput)bindable).PlaceHolder = (string)newValue,
             null,
             null,
             null
@@ -124,8 +130,12 @@ namespace MyMauiApp.Controls
             get => placeHolder;
             set 
             { 
+                OnPropertyChanging(nameof(PlaceHolder));
+
                 placeHolder = value;
                 SetValue(TextInput.PlaceHolderProperty, placeHolder);
+
+                OnPropertyChanged(nameof(PlaceHolder));
             }
         }
 
@@ -196,9 +206,10 @@ public partial class TextInput
             typeof(string),
             typeof(TextInput),
             "From every time",
-            ((int)BindingMode.TwoWay),
+            (BindingMode)((int)BindingMode.TwoWay),
             null,
-            null,
+            (bindable, oldValue, newValue) => 
+                        ((TextInput)bindable).Text = (string)newValue,
             null,
             null,
             null
@@ -209,8 +220,12 @@ public partial class TextInput
             get => text;
             set 
             { 
+                OnPropertyChanging(nameof(Text));
+
                 text = value;
                 SetValue(TextInput.TextProperty, text);
+
+                OnPropertyChanged(nameof(Text));
             }
         }
 
@@ -219,7 +234,7 @@ public partial class TextInput
             typeof(string),
             typeof(TextInput),
             "Always!",
-            ((int)BindingMode.OneWay),
+            (BindingMode)((int)BindingMode.OneWay),
             ValidateValue,
             PropertyChangedDelegate,
             PropertyChangingDelegate,
@@ -232,8 +247,12 @@ public partial class TextInput
             get => placeHolder;
             set 
             { 
+                OnPropertyChanging(nameof(PlaceHolder));
+
                 placeHolder = value;
                 SetValue(TextInput.PlaceHolderProperty, placeHolder);
+
+                OnPropertyChanged(nameof(PlaceHolder));
             }
         }
 
@@ -322,12 +341,13 @@ namespace WibuTube.Controls
 {
     public partial class TextInput
     {
-
         public static readonly BindableProperty TextProperty = BindableProperty.Create(
                     nameof(Text),
                     typeof(string),
                     typeof(TextInput),
-                    default
+                    default,
+                    propertyChanged: (bindable, oldValue, newValue) =>
+                                    ((TextInput)bindable).Text = (string)newValue
                 );
 
         public string Text
@@ -335,8 +355,12 @@ namespace WibuTube.Controls
             get => text;
             set 
             { 
+                OnPropertyChanging(nameof(Text));
+
                 text = value;
                 SetValue(TextInput.TextProperty, text);
+
+                OnPropertyChanged(nameof(Text));
             }
         }
 
@@ -344,7 +368,9 @@ namespace WibuTube.Controls
                     nameof(PlaceHolder),
                     typeof(string),
                     typeof(TextInput),
-                    "Do you trust me?"
+                    "Do you trust me?",
+                    propertyChanged: (bindable, oldValue, newValue) =>
+                                    ((TextInput)bindable).PlaceHolder = (string)newValue
                 );
 
         public string PlaceHolder
@@ -352,8 +378,12 @@ namespace WibuTube.Controls
             get => placeHolder;
             set 
             { 
+                OnPropertyChanging(nameof(PlaceHolder));
+
                 placeHolder = value;
                 SetValue(TextInput.PlaceHolderProperty, placeHolder);
+
+                OnPropertyChanged(nameof(PlaceHolder));
             }
         }
 

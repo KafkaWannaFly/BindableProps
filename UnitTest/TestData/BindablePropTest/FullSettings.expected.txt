@@ -11,7 +11,8 @@ namespace UnitTest.TestData.BindablePropTest
             "From every time",
             (BindingMode)((int)BindingMode.TwoWay),
             null,
-            null,
+            (bindable, oldValue, newValue) => 
+                        ((MyClass)bindable).Text = (string)newValue,
             null,
             null,
             null
@@ -22,8 +23,12 @@ namespace UnitTest.TestData.BindablePropTest
             get => text;
             set 
             { 
+                OnPropertyChanging(nameof(Text));
+
                 text = value;
                 SetValue(MyClass.TextProperty, text);
+
+                OnPropertyChanged(nameof(Text));
             }
         }
 
@@ -45,8 +50,12 @@ namespace UnitTest.TestData.BindablePropTest
             get => placeHolder;
             set 
             { 
+                OnPropertyChanging(nameof(PlaceHolder));
+
                 placeHolder = value;
                 SetValue(MyClass.PlaceHolderProperty, placeHolder);
+
+                OnPropertyChanged(nameof(PlaceHolder));
             }
         }
 

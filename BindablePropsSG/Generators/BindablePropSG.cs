@@ -126,7 +126,10 @@ namespace {namespaceName}
 
             var validateValueDelegate = GetAttributeParam(attributeArguments, "ValidateValueDelegate") ?? "null";
 
-            var propertyChangedDelegate = GetAttributeParam(attributeArguments, "PropertyChangedDelegate") ?? "null";
+            var propertyChangedDelegate = GetAttributeParam(
+                attributeArguments, "PropertyChangedDelegate"
+                ) ?? @$"(bindable, oldValue, newValue) => 
+                        (({className})bindable).{propName} = ({fieldType})newValue";
 
             var propertyChangingDelegate = GetAttributeParam(attributeArguments, "PropertyChangingDelegate") ?? "null";
 
@@ -153,8 +156,12 @@ namespace {namespaceName}
             get => {fieldName};
             set 
             {{ 
+                OnPropertyChanging(nameof({propName}));
+
                 {fieldName} = value;
                 SetValue({className}.{propName}Property, {fieldName});
+
+                OnPropertyChanged(nameof({propName}));
             }}
         }}
 ");
