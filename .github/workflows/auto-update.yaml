@@ -1,7 +1,7 @@
 name: "Dependabot Automerge - Action"
 
 on:
-  pull_request:
+  pull_request_target:
 
 jobs:
   worker:
@@ -22,6 +22,6 @@ jobs:
         uses: pascalgn/automerge-action@v0.15.3
         if: steps.waitforstatuschecks.outputs.status == 'success'
         env:
-          MERGE_LABELS: "update"
+          MERGE_LABELS: "dependencies"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MERGE_DELETE_BRANCH: true
