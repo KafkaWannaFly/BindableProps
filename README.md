@@ -6,7 +6,11 @@
 
 This library helps you to reduce writing boilerplate code when creating your custom UI components.
 
-## `BindableProp` - Basic Usage
+[TOC]
+
+## `BindableProp` - Basic Usage 
+
+<a href="#top">Back to Top :arrow_up:</a>
 
 Let say you want to create your own text input. Here's how it looks:
 
@@ -279,7 +283,9 @@ Finally, you can use your component in other page/view like a normal component. 
 
 
 
-## `AllBindableProps` and `IgnoredProp`
+## `AllBindableProps` and `IgnoredProp` 
+
+<a href="#top">Back to Top :arrow_up:</a>
 
 If you just need the default setting for all of your props, try this:
 
@@ -393,7 +399,9 @@ namespace WibuTube.Controls
 
 
 
-## Roadmap
+## Roadmap 
+
+<a href="#top">Back to Top :arrow_up:</a>
 
 The `BindableProp` along is just not enough for covering all use-cases of `BindableProperty`. Planning features:
 
