@@ -1,15 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnitTest
 {
     public class AllBindablePropsTest
     {
-        IIncrementalGenerator generator = new AllBindablePropsSG();
+        private readonly IIncrementalGenerator _generator = new AllBindablePropsSG();
 
         [Fact]
         public void ShouldDoNothing()
@@ -20,10 +15,10 @@ namespace UnitTest
                     "TestData",
                     "Shared",
                     "NoUseAtAll.txt"
-                    )
-                );
+                )
+            );
 
-            var generatedCode = TestHelper.GetGeneratedOutput(sourceCode, generator);
+            var generatedCode = TestHelper.GetGeneratedOutput(sourceCode, _generator);
 
             generatedCode.Should().BeNullOrEmpty();
         }
@@ -37,10 +32,10 @@ namespace UnitTest
                     "TestData",
                     "AllBindableProps",
                     "SimpleUsage.txt"
-                    )
-                );
+                )
+            );
 
-            var generatedCode = TestHelper.GetGeneratedOutput(sourceCode, generator);
+            var generatedCode = TestHelper.GetGeneratedOutput(sourceCode, _generator);
             generatedCode = TestHelper.RemoveAllWhiteSpace(generatedCode ?? "");
 
             var expectedCode = File.ReadAllText(
@@ -49,8 +44,8 @@ namespace UnitTest
                     "TestData",
                     "AllBindableProps",
                     "SimpleUsage.expected.txt"
-                    )
-                );
+                )
+            );
             expectedCode = TestHelper.RemoveAllWhiteSpace(expectedCode);
 
             generatedCode.Should().NotBeNullOrEmpty()
@@ -67,10 +62,10 @@ namespace UnitTest
                     "TestData",
                     "AllBindableProps",
                     "WithIgnoredPropAndBindableProp.txt"
-                    )
-                );
+                )
+            );
 
-            var generatedCode = TestHelper.GetGeneratedOutput(sourceCode, generator);
+            var generatedCode = TestHelper.GetGeneratedOutput(sourceCode, _generator);
             generatedCode = TestHelper.RemoveAllWhiteSpace(generatedCode ?? "");
 
             var expectedCode = File.ReadAllText(
@@ -79,8 +74,8 @@ namespace UnitTest
                     "TestData",
                     "AllBindableProps",
                     "WithIgnoredPropAndBindableProp.expected.txt"
-                    )
-                );
+                )
+            );
             expectedCode = TestHelper.RemoveAllWhiteSpace(expectedCode);
 
             generatedCode.Should().NotBeNullOrEmpty()

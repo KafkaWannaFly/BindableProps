@@ -4,7 +4,7 @@ namespace UnitTest
 {
     public class BindablePropTest
     {
-        IIncrementalGenerator generator = new BindablePropSG();
+        private readonly IIncrementalGenerator _generator = new BindablePropSG();
 
         [Fact]
         public void ShouldDoNothing()
@@ -18,7 +18,7 @@ namespace UnitTest
                     )
                 );
 
-            var generatedCode = TestHelper.GetGeneratedOutput(sourceCode, generator);
+            var generatedCode = TestHelper.GetGeneratedOutput(sourceCode, _generator);
 
             generatedCode.Should().BeNullOrEmpty();
         }
@@ -35,7 +35,7 @@ namespace UnitTest
                     )
                 );
 
-            var generatedCode = TestHelper.GetGeneratedOutput(sourceCode, generator);
+            var generatedCode = TestHelper.GetGeneratedOutput(sourceCode, _generator);
             generatedCode = TestHelper.RemoveAllWhiteSpace(generatedCode ?? "");
 
             var expectedCode = File.ReadAllText(
@@ -65,7 +65,7 @@ namespace UnitTest
                     )
                 );
 
-            var generatedCode = TestHelper.GetGeneratedOutput(sourceCode, generator);
+            var generatedCode = TestHelper.GetGeneratedOutput(sourceCode, _generator);
             generatedCode = TestHelper.RemoveAllWhiteSpace(generatedCode ?? "");
 
             var expectedCode = File.ReadAllText(

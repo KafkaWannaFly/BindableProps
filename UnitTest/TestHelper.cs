@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace UnitTest
 {
-    internal class TestHelper
+    internal static class TestHelper
     {
         public static string? GetGeneratedOutput(string sourceCode, IIncrementalGenerator generator)
         {
