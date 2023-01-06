@@ -1,0 +1,15 @@
+
+namespace MyMauiApp.Controls
+{
+    public partial class MyMauiControl : ContentView
+    {
+        [AttachedProp]
+        private bool _hasShadow;
+    
+        public MyMauiControl()
+        {
+            // My logic
+        }
+    }
+    
+}

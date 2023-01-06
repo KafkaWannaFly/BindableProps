@@ -72,5 +72,45 @@ namespace BindablePropsSG.Utils
 
             return syntax;
         }
+        
+        public static AttributeSyntax? GetAttributeByName(FieldDeclarationSyntax fieldSyntax, string attributeName)
+        {
+            var attributeSyntax = fieldSyntax.AttributeLists
+                .FirstOrDefault(attrList =>
+                {
+                    var attr = attrList.Attributes.FirstOrDefault();
+                    return attr is not null && SyntaxUtil.ExtractName(attr.Name) == attributeName;
+                })
+                ?.Attributes
+                .FirstOrDefault();
+
+            return attributeSyntax;
+        }
+        
+        public static string? GetFieldDefaultValue(FieldDeclarationSyntax fieldSyntax)
+        {
+            var variableDeclaration = fieldSyntax.DescendantNodesAndSelf()
+                .OfType<VariableDeclarationSyntax>()
+                .FirstOrDefault();
+            var variableDeclarator = variableDeclaration?.Variables.FirstOrDefault();
+            var initializer = variableDeclarator?.Initializer;
+            return initializer?.Value.ToString();
+        }
+        
+        public static string? GetAttributeParam(SeparatedSyntaxList<AttributeArgumentSyntax>? attributeArguments, string paramName)
+        {
+            var paramSyntax = attributeArguments?.FirstOrDefault(
+                attrArg => attrArg?.NameEquals?.Name.Identifier.Text == paramName
+            );
+
+            return paramSyntax?.Expression switch
+            {
+                InvocationExpressionSyntax invocationExpressionSyntax => invocationExpressionSyntax.ArgumentList
+                    .Arguments.FirstOrDefault()
+                    ?.ToString(),
+                LiteralExpressionSyntax literalExpressionSyntax => literalExpressionSyntax.Token.Value?.ToString(),
+                _ => paramSyntax?.Expression.ToString()
+            };
+        }
     }
 }

@@ -405,11 +405,9 @@ namespace WibuTube.Controls
 
 The `BindableProp` along is just not enough for covering all use-cases of `BindableProperty`. Planning features:
 
-| Attribute                      | Equivalent/Description                                       | Status    |
-| ------------------------------ | ------------------------------------------------------------ | --------- |
-| `BindableAttachedProp`         | `BindableProperty.CreateAttached`                            |           |
-| `BindableAttachedReadOnlyProp` | `BindablePropertyKey.CreateAttachedReadOnly`                 |           |
-| `BindableReadOnlyProp`         | `BindablePropertyKey.CreateReadOnly`                         |           |
-| `AllBindableProps`             | Put this to your class,<br />Default `BindableProp` to all field members | :ok_hand: |
-| `IgnoredProp`                  | `AllBindableProps` should ignore this field                  | :ok_hand: |
+| Attribute              | Equivalent/Description                                       | Status    |
+| ---------------------- | ------------------------------------------------------------ | --------- |
+| `BindableAttachedProp` | `BindableProperty.CreateAttached`                            | :ok_hand: |
+| `AllBindableProps`     | Put this to your class,<br />Default `BindableProp` to all field members | :ok_hand: |
+| `IgnoredProp`          | `AllBindableProps` should ignore this field                  | :ok_hand: |
 

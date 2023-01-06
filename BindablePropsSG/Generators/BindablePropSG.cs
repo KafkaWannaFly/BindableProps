@@ -119,26 +119,26 @@ namespace {namespaceName}
 
             var className = classSyntax.Identifier;
 
-            var defaultFieldValue = GetFieldDefaultValue(fieldSyntax) ?? "default";
+            var defaultFieldValue = SyntaxUtil.GetFieldDefaultValue(fieldSyntax) ?? "default";
 
-            var attributeSyntax = GetAttributeByName(fieldSyntax, "BindableProp");
+            var attributeSyntax = SyntaxUtil.GetAttributeByName(fieldSyntax, "BindableProp");
 
             var attributeArguments = attributeSyntax?.ArgumentList?.Arguments;
 
-            var defaultBindingMode = GetAttributeParam(attributeArguments, "DefaultBindingMode") ?? "0";
+            var defaultBindingMode = SyntaxUtil.GetAttributeParam(attributeArguments, "DefaultBindingMode") ?? "0";
 
-            var validateValueDelegate = GetAttributeParam(attributeArguments, "ValidateValueDelegate") ?? "null";
+            var validateValueDelegate = SyntaxUtil.GetAttributeParam(attributeArguments, "ValidateValueDelegate") ?? "null";
 
-            var propertyChangedDelegate = GetAttributeParam(
+            var propertyChangedDelegate = SyntaxUtil.GetAttributeParam(
                 attributeArguments, "PropertyChangedDelegate"
                 ) ?? @$"(bindable, oldValue, newValue) => 
                         (({className})bindable).{propName} = ({fieldType})newValue";
 
-            var propertyChangingDelegate = GetAttributeParam(attributeArguments, "PropertyChangingDelegate") ?? "null";
+            var propertyChangingDelegate = SyntaxUtil.GetAttributeParam(attributeArguments, "PropertyChangingDelegate") ?? "null";
 
-            var coerceValueDelegate = GetAttributeParam(attributeArguments, "CoerceValueDelegate") ?? "null";
+            var coerceValueDelegate = SyntaxUtil.GetAttributeParam(attributeArguments, "CoerceValueDelegate") ?? "null";
 
-            var createDefaultValueDelegate = GetAttributeParam(attributeArguments, "CreateDefaultValueDelegate") ?? "null";
+            var createDefaultValueDelegate = SyntaxUtil.GetAttributeParam(attributeArguments, "CreateDefaultValueDelegate") ?? "null";
 
             source.Append($@"
         public static readonly BindableProperty {propName}Property = BindableProperty.Create(
@@ -168,46 +168,6 @@ namespace {namespaceName}
             }}
         }}
 ");
-        }
-
-        private string? GetAttributeParam(SeparatedSyntaxList<AttributeArgumentSyntax>? attributeArguments, string paramName)
-        {
-            var paramSyntax = attributeArguments?.FirstOrDefault(
-                attrArg => attrArg?.NameEquals?.Name.Identifier.Text == paramName
-            );
-
-            return paramSyntax?.Expression switch
-            {
-                InvocationExpressionSyntax invocationExpressionSyntax => invocationExpressionSyntax.ArgumentList
-                    .Arguments.FirstOrDefault()
-                    ?.ToString(),
-                LiteralExpressionSyntax literalExpressionSyntax => literalExpressionSyntax.Token.Value?.ToString(),
-                _ => paramSyntax?.Expression.ToString()
-            };
-        }
-
-        private string? GetFieldDefaultValue(FieldDeclarationSyntax fieldSyntax)
-        {
-            var variableDeclaration = fieldSyntax.DescendantNodesAndSelf()
-                .OfType<VariableDeclarationSyntax>()
-                .FirstOrDefault();
-            var variableDeclarator = variableDeclaration?.Variables.FirstOrDefault();
-            var initializer = variableDeclarator?.Initializer;
-            return initializer?.Value.ToString();
-        }
-
-        private AttributeSyntax? GetAttributeByName(FieldDeclarationSyntax fieldSyntax, string attributeName)
-        {
-            var attributeSyntax = fieldSyntax.AttributeLists
-                .FirstOrDefault(attrList =>
-                {
-                    var attr = attrList.Attributes.FirstOrDefault();
-                    return attr is not null && SyntaxUtil.ExtractName(attr.Name) == attributeName;
-                })
-                ?.Attributes
-                .FirstOrDefault();
-
-            return attributeSyntax;
         }
     }
 }
