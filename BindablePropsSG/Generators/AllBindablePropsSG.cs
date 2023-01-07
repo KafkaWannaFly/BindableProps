@@ -15,7 +15,12 @@ namespace BindablePropsSG.Generators
     {
         private readonly List<string> ignoredAttributes = new()
         {
-            "IgnoredProp", "BindableProp", "IgnoredPropAttribute", "BindablePropAttribute"
+            "IgnoredProp",
+            "BindableProp",
+            "IgnoredPropAttribute",
+            "BindablePropAttribute",
+            "AttachedProp",
+            "AttachedPropAttribute"
         };
 
         protected override IEnumerable<string> TargetAttributes => new[]

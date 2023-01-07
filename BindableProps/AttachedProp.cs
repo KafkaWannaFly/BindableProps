@@ -1,6 +1,6 @@
 ﻿namespace BindableProps;
 
-[AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
 public sealed class AttachedProp : Attribute
 {
     public int DefaultBindingMode { get; set; }

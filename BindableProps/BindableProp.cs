@@ -1,5 +1,4 @@
-﻿#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-namespace BindableProps
+﻿namespace BindableProps
 {
     /// <summary>
     /// Auto generate code for <c>BindableProperty.Create</c>
@@ -59,15 +58,14 @@ namespace BindableProps
     {
         public int DefaultBindingMode { get; set; }
 
-        public string ValidateValueDelegate { get; set; }
+        public string? ValidateValueDelegate { get; set; }
 
-        public string PropertyChangedDelegate { get; set; }
+        public string? PropertyChangedDelegate { get; set; }
 
-        public string PropertyChangingDelegate { get; set; }
+        public string? PropertyChangingDelegate { get; set; }
 
-        public string CoerceValueDelegate { get; set; }
+        public string? CoerceValueDelegate { get; set; }
 
-        public string CreateDefaultValueDelegate { get; set; }
+        public string? CreateDefaultValueDelegate { get; set; }
     }
 }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
