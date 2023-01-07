@@ -11,27 +11,39 @@ namespace BindablePropsSG.Generators
     [Generator]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     [SuppressMessage("ReSharper", "HeapView.BoxingAllocation")]
-    public class AllBindablePropsSG : IIncrementalGenerator
+    public class AllBindablePropsSG : BaseGenerator
     {
         private readonly List<string> ignoredAttributes = new()
         {
             "IgnoredProp", "BindableProp", "IgnoredPropAttribute", "BindablePropAttribute"
         };
 
-        public void Initialize(IncrementalGeneratorInitializationContext context)
+        protected override IEnumerable<string> TargetAttributes => new[]
         {
-            var classGroups = context.SyntaxProvider
-                .CreateSyntaxProvider(
-                    predicate: IsAllBindableProps,
-                    transform: Transform
-                ).Where(group => group.Item1 is not null && group.Item2 is not null)
-                .Collect();
+            "AllBindableProps",
+            "AllBindablePropsAttribute"
+        };
 
-            context.RegisterSourceOutput(classGroups, Execute);
+        protected override (SyntaxNode?, ISymbol?) Transform(GeneratorSyntaxContext context,
+            CancellationToken cancellationToken)
+        {
+            var attributeSyntax = (AttributeSyntax)context.Node;
+
+            // Attribute --> AttributeList --> Class
+            if (attributeSyntax.Parent?.Parent is not ClassDeclarationSyntax classDeclarationSyntax)
+                return (null, null);
+
+            var classSymbol = context.SemanticModel
+                .Compilation
+                .GetTypeByMetadataName(
+                    SyntaxUtil.GetClassFullname(classDeclarationSyntax)
+                );
+
+            return (classDeclarationSyntax, classSymbol);
         }
 
-        private void Execute(SourceProductionContext context,
-            ImmutableArray<(ClassDeclarationSyntax?, INamedTypeSymbol?)> classGroups)
+        protected override void Execute(SourceProductionContext context,
+            ImmutableArray<(SyntaxNode?, ISymbol?)> classGroups)
         {
             if (classGroups.IsDefaultOrEmpty)
             {
@@ -41,16 +53,15 @@ namespace BindablePropsSG.Generators
             foreach (var group in classGroups)
             {
                 var sourceCode = ProcessClass(group!);
-                var className = SyntaxUtil.GetClassFullname(group.Item1!);
+                var className = SyntaxUtil.GetClassFullname(group.Item1! as TypeDeclarationSyntax);
 
-                if (sourceCode is not null)
-                    context.AddSource($"{className}.g.cs", sourceCode);
+                context.AddSource($"{className}.g.cs", sourceCode);
             }
         }
 
-        private string? ProcessClass((ClassDeclarationSyntax, INamedTypeSymbol) group)
+        protected override string ProcessClass((SyntaxNode, ISymbol) group)
         {
-            var (classSyntax, classSymbol) = group;
+            var (classSyntax, classSymbol) = ((ClassDeclarationSyntax, INamedTypeSymbol))group;
 
             var availableFieldSymbols = classSymbol.GetMembers()
                 .Where(symbol => FieldNotIncludeAttributes(
@@ -63,7 +74,7 @@ namespace BindablePropsSG.Generators
             var fieldSymbols = availableFieldSymbols.ToList();
             if (!fieldSymbols.Any())
             {
-                return null;
+                return string.Empty;
             }
 
             var usingDirectives = classSyntax.SyntaxTree.GetCompilationUnitRoot().Usings;
@@ -86,7 +97,10 @@ namespace {namespaceName}
                 if (fieldSymbol is null)
                     continue;
 
-                ProcessField(source, classSyntax, classSymbol, fieldSymbol);
+                var variableDeclaratorSyntax = SyntaxUtil.FindSyntaxBySymbol(classSyntax, fieldSymbol);
+                // variableDeclaratorSyntax --> variableDeclarationSyntax --> fieldDeclarationSyntax
+                var fieldDeclarationSyntax = variableDeclaratorSyntax.Parent?.Parent!;
+                ProcessField(source, classSyntax, fieldDeclarationSyntax, fieldSymbol);
             }
 
             source.Append(@$"
@@ -97,19 +111,21 @@ namespace {namespaceName}
             return source.ToString();
         }
 
-        private void ProcessField(
-            StringBuilder source,
-            ClassDeclarationSyntax classDeclarationSyntax,
-            INamedTypeSymbol classSymbol,
-            IFieldSymbol fieldSymbol)
+        protected override void ProcessField(StringBuilder source, ClassDeclarationSyntax classDeclarationSyntax,
+            SyntaxNode syntaxNode, ISymbol fieldSymbol)
         {
+            var fieldSyntax = (FieldDeclarationSyntax)syntaxNode;
+
             var fieldName = fieldSymbol.Name;
             var propName = StringUtil.PascalCaseOf(fieldName);
-            var dataType = fieldSymbol.Type;
-            var className = classSymbol.Name;
+            var dataType = fieldSyntax.Declaration.Type;
 
-            var syntax = SyntaxUtil.FindSyntaxBySymbol(classDeclarationSyntax, fieldSymbol) as VariableDeclaratorSyntax;
-            var defaultValue = syntax?.Initializer?
+            var className = classDeclarationSyntax.Identifier.ToString();
+
+            var variableDeclaratorSyntax = fieldSyntax.ChildNodes().OfType<VariableDeclarationSyntax>().FirstOrDefault()
+                ?.Variables
+                .FirstOrDefault();
+            var defaultValue = variableDeclaratorSyntax?.Initializer?
                 .Value
                 .ToString() ?? "default";
 
@@ -139,7 +155,7 @@ namespace {namespaceName}
 ");
         }
 
-        private bool FieldNotIncludeAttributes(ISymbol symbol, List<string> attributeNames)
+        private bool FieldNotIncludeAttributes(ISymbol symbol, ICollection<string> attributeNames)
         {
             if (symbol is IFieldSymbol fieldSymbol)
             {
@@ -153,36 +169,6 @@ namespace {namespaceName}
             }
 
             return false;
-        }
-
-        private (ClassDeclarationSyntax?, INamedTypeSymbol?) Transform(GeneratorSyntaxContext context,
-            CancellationToken cancellationToken)
-        {
-            var attributeSyntax = (AttributeSyntax)context.Node;
-
-            // Attribute --> AttributeList --> Class
-            if (attributeSyntax.Parent?.Parent is not ClassDeclarationSyntax classDeclarationSyntax)
-                return (null, null);
-
-            var classSymbol = context.SemanticModel
-                .Compilation
-                .GetTypeByMetadataName(
-                    SyntaxUtil.GetClassFullname(classDeclarationSyntax)
-                );
-
-            return (classDeclarationSyntax, classSymbol);
-        }
-
-        private bool IsAllBindableProps(SyntaxNode node, CancellationToken _)
-        {
-            if (node is not AttributeSyntax attributeSyntax)
-            {
-                return false;
-            }
-
-            var name = SyntaxUtil.ExtractName(attributeSyntax.Name);
-
-            return name is "AllBindableProps" or "AllBindablePropsAttribute";
         }
     }
 }
