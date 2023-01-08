@@ -13,7 +13,7 @@
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <PackageTags>source-generator;maui;net-6;utility;helper</PackageTags>
         <PackageProjectUrl>https://github.com/KafkaWannaFly/BindableProps</PackageProjectUrl>
-        <Version>1.3.2</Version>
+        <Version>1.3.3</Version>
         <RepositoryUrl>https://github.com/KafkaWannaFly/BindableProps</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageReadmeFile>README.md</PackageReadmeFile>

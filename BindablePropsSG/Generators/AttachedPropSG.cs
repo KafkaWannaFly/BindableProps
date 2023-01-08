@@ -46,10 +46,8 @@ public class AttachedPropSG : BaseGenerator
 
         var validateValueDelegate = SyntaxUtil.GetAttributeParam(attributeArguments, "ValidateValueDelegate") ?? "null";
 
-        var propertyChangedDelegate = SyntaxUtil.GetAttributeParam(
-            attributeArguments, "PropertyChangedDelegate"
-        ) ?? @$"(bindable, oldValue, newValue) => 
-                        (({className})bindable).{pascalCaseFieldName} = ({fieldType})newValue";
+        var propertyChangedDelegate =
+            SyntaxUtil.GetAttributeParam(attributeArguments, "PropertyChangedDelegate") ?? "null";
 
         var propertyChangingDelegate =
             SyntaxUtil.GetAttributeParam(attributeArguments, "PropertyChangingDelegate") ?? "null";
@@ -82,7 +80,6 @@ public class AttachedPropSG : BaseGenerator
         {{
             view.SetValue({propName}, value);
         }}
-        
 ");
     }
 }
