@@ -57,30 +57,35 @@ namespace BindablePropsSG.Generators
 
             foreach (var group in classGroups)
             {
-                var sourceCode = ProcessClass(group!);
-                var className = SyntaxUtil.GetClassFullname(group.Item1! as TypeDeclarationSyntax);
+                var (classSyntax, classSymbol) = ((ClassDeclarationSyntax?, INamedTypeSymbol?))group;
+                if (classSyntax is null || classSymbol is null)
+                    continue;
+
+                var fieldTuples = classSymbol.GetMembers()
+                    .Where(symbol => FieldNotIncludeAttributes(
+                        symbol,
+                        ignoredAttributes)
+                    )
+                    .Where(item => item is not null && !item.IsStatic)
+                    .Select(fieldSymbol =>
+                    {
+                        var variableDeclaratorSyntax = SyntaxUtil.FindSyntaxBySymbol(classSyntax, fieldSymbol!);
+                        return (variableDeclaratorSyntax, fieldSymbol);
+                    })
+                    .ToList();
+
+                var sourceCode = ProcessClass(classSyntax, fieldTuples);
+                var className = SyntaxUtil.GetClassFullname(classSyntax);
 
                 context.AddSource($"{className}.g.cs", sourceCode);
             }
         }
 
-        protected override string ProcessClass((SyntaxNode, ISymbol) group)
+        protected override string ProcessClass(ClassDeclarationSyntax? classSyntax,
+            List<(SyntaxNode, ISymbol)> syntaxSymbols)
         {
-            var (classSyntax, classSymbol) = ((ClassDeclarationSyntax, INamedTypeSymbol))group;
-
-            var availableFieldSymbols = classSymbol.GetMembers()
-                .Where(symbol => FieldNotIncludeAttributes(
-                    symbol,
-                    ignoredAttributes)
-                )
-                .Select(item => item as IFieldSymbol)
-                .Where(item => item is not null && !item.IsStatic);
-
-            var fieldSymbols = availableFieldSymbols.ToList();
-            if (!fieldSymbols.Any())
-            {
+            if (classSyntax is null || !syntaxSymbols.Any())
                 return string.Empty;
-            }
 
             var usingDirectives = classSyntax.SyntaxTree.GetCompilationUnitRoot().Usings;
 
@@ -97,15 +102,11 @@ namespace {namespaceName}
     {{
 ");
 
-            foreach (var fieldSymbol in fieldSymbols)
+            foreach (var (syntax, symbol) in syntaxSymbols)
             {
-                if (fieldSymbol is null)
-                    continue;
-
-                var variableDeclaratorSyntax = SyntaxUtil.FindSyntaxBySymbol(classSyntax, fieldSymbol);
                 // variableDeclaratorSyntax --> variableDeclarationSyntax --> fieldDeclarationSyntax
-                var fieldDeclarationSyntax = variableDeclaratorSyntax.Parent?.Parent!;
-                ProcessField(source, classSyntax, fieldDeclarationSyntax, fieldSymbol);
+                var fieldDeclarationSyntax = syntax.Parent?.Parent!;
+                ProcessField(source, classSyntax, fieldDeclarationSyntax, symbol);
             }
 
             source.Append(@$"

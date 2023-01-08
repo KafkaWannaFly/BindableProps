@@ -18,6 +18,7 @@ jobs:
           report_title: Unit Test Report
           github_token: ${{ secrets.GITHUB_TOKEN }}
           fail_build_on_failed_tests: true
+          msbuild_verbosity: minimal
 
   publish:
     needs: unit-test

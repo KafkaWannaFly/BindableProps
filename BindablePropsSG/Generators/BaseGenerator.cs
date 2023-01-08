@@ -49,7 +49,7 @@ public abstract class BaseGenerator : IIncrementalGenerator
             return default;
 
         var symbol =
-            context.SemanticModel.GetDeclaredSymbol(syntax.Declaration.Variables.FirstOrDefault()!) as IFieldSymbol;
+            context.SemanticModel.GetDeclaredSymbol(syntax.Declaration.Variables.FirstOrDefault()!);
 
         return (syntax, symbol);
     }
