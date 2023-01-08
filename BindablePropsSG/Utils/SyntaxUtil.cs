@@ -1,9 +1,11 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace BindablePropsSG.Utils
 {
+    [SuppressMessage("ReSharper", "HeapView.BoxingAllocation")]
     public static class SyntaxUtil
     {
         public static string? ExtractName(NameSyntax? name)
@@ -24,7 +26,7 @@ namespace BindablePropsSG.Utils
             var namespaces = new LinkedList<BaseNamespaceDeclarationSyntax>();
             var types = new LinkedList<TypeDeclarationSyntax>();
 
-            for (var parent = source.Parent; parent is not null; parent = parent.Parent)
+            for (var parent = source?.Parent; parent is not null; parent = parent.Parent)
             {
                 switch (parent)
                 {
@@ -58,8 +60,8 @@ namespace BindablePropsSG.Utils
 
         private static void AppendName(StringBuilder builder, TypeDeclarationSyntax? type)
         {
-            builder.Append(type.Identifier.Text);
-            var typeArguments = type.TypeParameterList?.ChildNodes()
+            builder.Append(type?.Identifier.Text);
+            var typeArguments = type?.TypeParameterList?.ChildNodes()
                 .Count(node => node is TypeParameterSyntax) ?? 0;
             if (typeArguments != 0)
                 builder.Append(".").Append(typeArguments);
@@ -72,21 +74,21 @@ namespace BindablePropsSG.Utils
 
             return syntax;
         }
-        
+
         public static AttributeSyntax? GetAttributeByName(FieldDeclarationSyntax fieldSyntax, string attributeName)
         {
             var attributeSyntax = fieldSyntax.AttributeLists
                 .FirstOrDefault(attrList =>
                 {
                     var attr = attrList.Attributes.FirstOrDefault();
-                    return attr is not null && SyntaxUtil.ExtractName(attr.Name) == attributeName;
+                    return attr is not null && ExtractName(attr.Name) == attributeName;
                 })
                 ?.Attributes
                 .FirstOrDefault();
 
             return attributeSyntax;
         }
-        
+
         public static string? GetFieldDefaultValue(FieldDeclarationSyntax fieldSyntax)
         {
             var variableDeclaration = fieldSyntax.DescendantNodesAndSelf()
@@ -96,8 +98,9 @@ namespace BindablePropsSG.Utils
             var initializer = variableDeclarator?.Initializer;
             return initializer?.Value.ToString();
         }
-        
-        public static string? GetAttributeParam(SeparatedSyntaxList<AttributeArgumentSyntax>? attributeArguments, string paramName)
+
+        public static string? GetAttributeParam(SeparatedSyntaxList<AttributeArgumentSyntax>? attributeArguments,
+            string paramName)
         {
             var paramSyntax = attributeArguments?.FirstOrDefault(
                 attrArg => attrArg?.NameEquals?.Name.Identifier.Text == paramName
