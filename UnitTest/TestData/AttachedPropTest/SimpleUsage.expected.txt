@@ -11,8 +11,7 @@ namespace MyMauiApp.Controls
             default,
             (BindingMode)0,
             null,
-            (bindable, oldValue, newValue) => 
-                        ((MyMauiControl)bindable).HasShadow = (bool)newValue,
+            null,
             null,
             null,
             null
