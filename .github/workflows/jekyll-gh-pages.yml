@@ -30,7 +30,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Install just-the-doc
-        run: cd docs && bundle install
+        run: cd docs && gem install bundler && bundle install
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
