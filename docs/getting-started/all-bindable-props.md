@@ -1,14 +1,8 @@
----
-layout: default
-title: AllBindableProps and IgnoredProp
-nav_order: 3
----
-
 # AllBindableProps and IgnoredProp
 
 If you just need the default setting for many of your props, try this:
 
-```c#
+```csharp
 [AllBindableProps]
 public partial class TextInput : ContentView
 {
@@ -61,7 +55,7 @@ public partial class TextInput : ContentView
 
 And the result is:
 
-```c#
+```csharp
 namespace WibuTube.Controls
 {
     public partial class TextInput

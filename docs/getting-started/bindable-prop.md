@@ -1,14 +1,8 @@
----
-layout: default
-title: BindableProp
-nav_order: 2
----
-
-# Simple Usage
+## Simple Usage
 
 Let say you want to create your own text input. Normally, here's how it looks:
 
-```c#
+```csharp
 namespace MyMauiApp.Controls;
 
 public class TextInput : ContentView
@@ -42,7 +36,7 @@ public class TextInput : ContentView
 ```
 
 With `BindableProp`, your code will become like this and done:
-```c#
+```csharp
 using BindableProps;
 
 namespace MyMauiApp.Controls;
@@ -64,14 +58,13 @@ public partial class TextInput : ContentView
 }
 ```
 
-
 The real magic happens at Solution Explorer > Dependencies > Analyzers > BindablePropsSG
 
-![image-20220704231041505](assets/images/image-20220704231041505.png)
+![image-20220704231041505](../assets/images/image-20220704231041505.png)
 
 What you would see in `TextInput.g.cs` is the boilerplate code which you had to write. I'll write them for you!
 
-```c#
+```csharp
 using BindableProps;
 
 namespace MyMauiApp.Controls
@@ -139,13 +132,11 @@ namespace MyMauiApp.Controls
 }
 ```
 
-
-
-# Full Usage
+## Full Usage
 
 The above example is the minimal amount of code to work. Here is an example of the complete features:
 
-```c#
+```csharp
 public partial class TextInput : ContentView
 {
     // Create prop with a few settings
@@ -194,7 +185,7 @@ public partial class TextInput : ContentView
 
 And the corresponding result would like:
 
-```c#
+```csharp
 public partial class TextInput
     {
         public static readonly BindableProperty TextProperty = BindableProperty.Create(

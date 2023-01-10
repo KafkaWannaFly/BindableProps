@@ -14,7 +14,7 @@ This library helps you to reduce writing boilerplate code when creating your cus
 
 Let say you want to create your own text input. Here's how it looks:
 
-```c#
+```csharp
 namespace MyMauiApp.Controls;
 
 public class TextInput : ContentView
@@ -51,7 +51,7 @@ public class TextInput : ContentView
 
 With `BindableProps`, your code will become like this:
 
-```c#
+```csharp
 using BindableProps;
 
 namespace MyMauiApp.Controls;
@@ -79,7 +79,7 @@ The real magic happens at Solution Explorer > Dependencies > Analyzers > Bindabl
 
 What you would see in `TextInput.g.cs` is the boilerplate code which you had to write. I'll write them for you!
 
-```c#
+```csharp
 using BindableProps;
 
 namespace MyMauiApp.Controls
@@ -151,7 +151,7 @@ namespace MyMauiApp.Controls
 
 The above example is the minimal amount of code to work. Here is the complete features:
 
-```c#
+```csharp
 public partial class TextInput : ContentView
 {
     // Create prop with a few settings
@@ -202,7 +202,7 @@ public partial class TextInput : ContentView
 
 And the corresponding result would like:
 
-```c#
+```csharp
 public partial class TextInput
     {
         public static readonly BindableProperty TextProperty = BindableProperty.Create(
@@ -289,7 +289,7 @@ Finally, you can use your component in other page/view like a normal component. 
 
 If you just need the default setting for all of your props, try this:
 
-```c#
+```csharp
 [AllBindableProps]
 public partial class TextInput : ContentView
 {
@@ -342,7 +342,7 @@ public partial class TextInput : ContentView
 
 And the result is:
 
-```c#
+```csharp
 namespace WibuTube.Controls
 {
     public partial class TextInput
