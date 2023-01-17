@@ -1,4 +1,4 @@
-![logo](favicon.ico)
+![logo](assets/images/favicon.ico)
 
 # BinadableProp
 
