@@ -59,5 +59,33 @@ namespace UnitTest.TestData.BindablePropTest
                 OnPropertyChanged(nameof(Description));
             }
         }
+        
+        public static readonly BindableProperty SideNoteProperty = BindableProperty.Create(
+                    nameof(SideNote),
+                    typeof(string),
+                    typeof(SimpleUsage),
+                    default,
+                    (BindingMode)0,
+                    null,
+                    (bindable, oldValue, newValue) => 
+                                ((SimpleUsage)bindable).SideNote = (string?)newValue,
+                    null,
+                    null,
+                    null
+                );
+        
+        public string? SideNote
+        {
+            get => sideNote;
+            set 
+            {
+                OnPropertyChanging(nameof(SideNote));
+
+                sideNote = value;
+                SetValue(SimpleUsage.SideNoteProperty, sideNote);
+
+                OnPropertyChanged(nameof(SideNote));
+            }
+        }
     }
 }
