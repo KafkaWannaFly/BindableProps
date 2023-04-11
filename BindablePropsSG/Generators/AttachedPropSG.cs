@@ -33,6 +33,13 @@ public class AttachedPropSG : BaseGenerator
         var fieldSyntax = (FieldDeclarationSyntax)syntaxNode;
 
         var fieldType = fieldSyntax.Declaration.Type;
+        
+        // typeof operation doesn't accept nullable data type
+        var unNullableDataType = fieldType.ToString();
+        if (unNullableDataType[unNullableDataType.Length - 1] == '?')
+        {
+            unNullableDataType = unNullableDataType.Substring(0, unNullableDataType.Length - 1);
+        }
 
         var className = classSyntax.Identifier;
 
@@ -60,7 +67,7 @@ public class AttachedPropSG : BaseGenerator
         source.Append($@"
         public static readonly BindableProperty {propName} = BindableProperty.CreateAttached(
             ""{pascalCaseFieldName}"",
-            typeof({fieldType}),
+            typeof({unNullableDataType}),
             typeof({className}),
             {defaultFieldValue},
             (BindingMode){defaultBindingMode},

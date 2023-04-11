@@ -126,6 +126,13 @@ namespace {namespaceName}
             var propName = StringUtil.PascalCaseOf(fieldName);
             var dataType = fieldSyntax.Declaration.Type;
 
+            // typeof operation doesn't accept nullable data type
+            var unNullableDataType = dataType.ToString();
+            if (unNullableDataType[unNullableDataType.Length - 1] == '?')
+            {
+                unNullableDataType = unNullableDataType.Substring(0, unNullableDataType.Length - 1);
+            }
+
             var className = classDeclarationSyntax.Identifier.ToString();
 
             var variableDeclaratorSyntax = fieldSyntax.ChildNodes().OfType<VariableDeclarationSyntax>().FirstOrDefault()
@@ -138,7 +145,7 @@ namespace {namespaceName}
             source.Append($@"
         public static readonly BindableProperty {propName}Property = BindableProperty.Create(
                     nameof({propName}),
-                    typeof({dataType}),
+                    typeof({unNullableDataType}),
                     typeof({className}),
                     {defaultValue},
                     propertyChanged: (bindable, oldValue, newValue) =>
