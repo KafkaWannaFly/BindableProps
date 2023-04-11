@@ -21,7 +21,6 @@ jobs:
           msbuild_verbosity: minimal
 
   publish:
-    needs: unit-test
     name: Build, Pack & Publish
     runs-on: ubuntu-latest
     steps:
