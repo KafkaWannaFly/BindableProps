@@ -10,5 +10,8 @@
         
         [BindableProp]
         string? sideNote;
+        
+        [BindableProp]
+        private new Brush background;
     }
 }

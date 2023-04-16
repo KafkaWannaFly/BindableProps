@@ -39,6 +39,9 @@ namespace BindablePropsSG.Generators
                 unNullableDataType = unNullableDataType.Substring(0, unNullableDataType.Length - 1);
             }
 
+            var newKeyword = fieldSyntax.Modifiers
+                .FirstOrDefault(keyword => keyword.Text.Equals("new"));
+
             var className = classSyntax.Identifier;
 
             var defaultFieldValue = SyntaxUtil.GetFieldDefaultValue(fieldSyntax) ?? "default";
@@ -66,7 +69,7 @@ namespace BindablePropsSG.Generators
                 SyntaxUtil.GetAttributeParam(attributeArguments, "CreateDefaultValueDelegate") ?? "null";
 
             source.Append($@"
-        public static readonly BindableProperty {propName}Property = BindableProperty.Create(
+        public static {newKeyword} readonly BindableProperty {propName}Property = BindableProperty.Create(
             nameof({propName}),
             typeof({unNullableDataType}),
             typeof({className}),
@@ -79,7 +82,7 @@ namespace BindablePropsSG.Generators
             {createDefaultValueDelegate}
         );
 
-        public {fieldType} {propName}
+        public {newKeyword} {fieldType} {propName}
         {{
             get => {fieldName};
             set 
