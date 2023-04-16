@@ -88,7 +88,7 @@ namespace UnitTest.TestData.BindablePropTest
             }
         }
         
-        public static new readonly BindableProperty BackgroundProperty = BindableProperty.Create(
+        new public static readonly BindableProperty BackgroundProperty = BindableProperty.Create(
                     nameof(Background),
                     typeof(Brush),
                     typeof(SimpleUsage),
@@ -102,7 +102,7 @@ namespace UnitTest.TestData.BindablePropTest
                     null
                 );
         
-        public new Brush Background
+        new public Brush Background
         {
             get => background;
             set 

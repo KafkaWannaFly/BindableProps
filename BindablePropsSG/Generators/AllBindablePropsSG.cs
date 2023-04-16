@@ -132,6 +132,9 @@ namespace {namespaceName}
             {
                 unNullableDataType = unNullableDataType.Substring(0, unNullableDataType.Length - 1);
             }
+            
+            var newKeyword = fieldSyntax.Modifiers
+                .FirstOrDefault(keyword => keyword.Text.Equals("new"));
 
             var className = classDeclarationSyntax.Identifier.ToString();
 
@@ -143,7 +146,7 @@ namespace {namespaceName}
                 .ToString() ?? "default";
 
             source.Append($@"
-        public static readonly BindableProperty {propName}Property = BindableProperty.Create(
+        {newKeyword} public static readonly BindableProperty {propName}Property = BindableProperty.Create(
                     nameof({propName}),
                     typeof({unNullableDataType}),
                     typeof({className}),
@@ -152,7 +155,7 @@ namespace {namespaceName}
                                     (({className})bindable).{propName} = ({dataType})newValue
                 );
 
-        public {dataType} {propName}
+        {newKeyword} public {dataType} {propName}
         {{
             get => {fieldName};
             set 

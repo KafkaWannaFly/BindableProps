@@ -40,6 +40,9 @@ public class AttachedPropSG : BaseGenerator
         {
             unNullableDataType = unNullableDataType.Substring(0, unNullableDataType.Length - 1);
         }
+        
+        var newKeyword = fieldSyntax.Modifiers
+            .FirstOrDefault(keyword => keyword.Text.Equals("new"));
 
         var className = classSyntax.Identifier;
 
@@ -65,7 +68,7 @@ public class AttachedPropSG : BaseGenerator
             SyntaxUtil.GetAttributeParam(attributeArguments, "CreateDefaultValueDelegate") ?? "null";
 
         source.Append($@"
-        public static readonly BindableProperty {propName} = BindableProperty.CreateAttached(
+        {newKeyword} public static readonly BindableProperty {propName} = BindableProperty.CreateAttached(
             ""{pascalCaseFieldName}"",
             typeof({unNullableDataType}),
             typeof({className}),
@@ -78,12 +81,12 @@ public class AttachedPropSG : BaseGenerator
             {createDefaultValueDelegate}
         );
 
-        public static {fieldType} Get{pascalCaseFieldName}(BindableObject view)
+        {newKeyword} public static {fieldType} Get{pascalCaseFieldName}(BindableObject view)
         {{
             return ({fieldType})view.GetValue({propName});
         }}
 
-        public static void Set{pascalCaseFieldName}(BindableObject view, {fieldType} value)
+        {newKeyword} public static void Set{pascalCaseFieldName}(BindableObject view, {fieldType} value)
         {{
             view.SetValue({propName}, value);
         }}
