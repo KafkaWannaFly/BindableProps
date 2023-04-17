@@ -69,7 +69,7 @@ namespace BindablePropsSG.Generators
                 SyntaxUtil.GetAttributeParam(attributeArguments, "CreateDefaultValueDelegate") ?? "null";
 
             source.Append($@"
-        {newKeyword} public static readonly BindableProperty {propName}Property = BindableProperty.Create(
+        public {newKeyword} static readonly BindableProperty {propName}Property = BindableProperty.Create(
             nameof({propName}),
             typeof({unNullableDataType}),
             typeof({className}),
@@ -82,7 +82,7 @@ namespace BindablePropsSG.Generators
             {createDefaultValueDelegate}
         );
 
-        {newKeyword} public {fieldType} {propName}
+        public {newKeyword} {fieldType} {propName}
         {{
             get => {fieldName};
             set 

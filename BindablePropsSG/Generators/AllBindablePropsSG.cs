@@ -146,7 +146,7 @@ namespace {namespaceName}
                 .ToString() ?? "default";
 
             source.Append($@"
-        {newKeyword} public static readonly BindableProperty {propName}Property = BindableProperty.Create(
+        public {newKeyword} static readonly BindableProperty {propName}Property = BindableProperty.Create(
                     nameof({propName}),
                     typeof({unNullableDataType}),
                     typeof({className}),
@@ -155,7 +155,7 @@ namespace {namespaceName}
                                     (({className})bindable).{propName} = ({dataType})newValue
                 );
 
-        {newKeyword} public {dataType} {propName}
+        public {newKeyword} {dataType} {propName}
         {{
             get => {fieldName};
             set 
