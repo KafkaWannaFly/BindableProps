@@ -10,19 +10,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        
-      - name: Explore
-        run: pwd && ls
 
-      - name: Run unit tests
-        uses: zyborg/dotnet-tests-report@v1
+#      - name: Run unit tests
+#        uses: zyborg/dotnet-tests-report@v1
+#        with:
+#          project_path: UnitTest/
+#          report_name: unit_test_report
+#          report_title: Unit Test Report
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          fail_build_on_failed_tests: true
+#          msbuild_verbosity: minimal
+
+      - name: Unit test
+        run: dotnet test ./UnitTest --collect:"XPlat Code Coverage" --logger "trx;LogFileName=test-results.trx"
+        
+      - name: Test Report
+        uses: phoenix-actions/test-reporting@v8
+        id: test-report               # Set ID reference for step
+        if: success() || failure()    # run this step even if previous step failed
         with:
-          project_path: UnitTest/
-          report_name: unit_test_report
-          report_title: Unit Test Report
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          fail_build_on_failed_tests: true
-          msbuild_verbosity: minimal
+          name: xunit            # Name of the check run which will be created
+          path: UnitTest/TestResults    # Path to test results
+          reporter: dotnet-trx        # Format of test results
+          
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   publish:
     name: Build, Pack & Publish
