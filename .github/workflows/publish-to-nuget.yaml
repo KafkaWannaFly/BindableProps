@@ -30,8 +30,9 @@ jobs:
         if: success() || failure()    # run this step even if previous step failed
         with:
           name: xunit            # Name of the check run which will be created
-          path: UnitTest/TestResults    # Path to test results
+          path: UnitTest/TestResults/*.trx    # Path to test results
           reporter: dotnet-trx        # Format of test results
+          fail-on-error: 'false'
           
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
