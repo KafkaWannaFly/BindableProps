@@ -4,11 +4,9 @@
 
 ![License](https://img.shields.io/github/license/KafkaWannaFly/BindableProps?style=flat-square) ![Stars](https://img.shields.io/github/stars/KafkaWannaFly/BindableProps?style=flat-square&logo=dependabot) 
 
-<a href="https://codecov.io/gh/KafkaWannaFly/BindableProps" >
-<img src="https://codecov.io/gh/KafkaWannaFly/BindableProps/branch/main/graph/badge.svg?token=nS2rZZ4QHS"/>
-</a>
+[![codecov](https://codecov.io/gh/KafkaWannaFly/BindableProps/branch/main/graph/badge.svg?token=nS2rZZ4QHS)](https://codecov.io/gh/KafkaWannaFly/BindableProps/tree/master)
 
-
+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
 > I spend hours to save your moments.
 
 This library helps you to reduce writing boilerplate code when creating your custom UI components.
