@@ -20,6 +20,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           fail_build_on_failed_tests: true
           msbuild_verbosity: minimal
+          gist_name: bindable_props_tests.md
+          gist_badge_label: 'Bindable Props: %Counters_passed%/%Counters_total%'
+          gist_token: ${{ secrets.GIST_TOKEN }}
           
   publish:
     name: Build, Pack & Publish
@@ -35,6 +38,3 @@ jobs:
           # Filepath of the project to be packaged, relative to root of repository
           PROJECT_FILE_PATH: BindableProps/BindableProps.csproj
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-          gist_name: bindable_props_tests.md
-          gist_badge_label: 'Bindable Props: %Counters_passed%/%Counters_total%'
-          gist_token: ${{ secrets.GIST_TOKEN }}
