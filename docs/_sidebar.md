@@ -1,5 +1,0 @@
-- [Overview](Overview.md)
-- Getting Started
-  - [BindableProp](getting-started/bindable-prop.md)
-  - [AllBindableProps](getting-started/all-bindable-props.md)
-  - [AttachedProp](getting-started/attached-prop.md)
