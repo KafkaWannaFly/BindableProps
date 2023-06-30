@@ -5,7 +5,7 @@
 const config = {
     title: "BindableProps",
     tagline: "BindableProps",
-    favicon: "./static/img/favicon.ico",
+    favicon: "img/favicon.ico",
 
     // Set the production url of your site here
     url: "https://kafkawannafly.github.io",
@@ -53,8 +53,8 @@ const config = {
             navbar: {
                 title: "BindableProps",
                 logo: {
-                    alt: "My Site Logo",
-                    src: "./static/img/favicon.ico",
+                    alt: "Logo",
+                    src: "img/favicon.ico",
                 },
                 items: [
                     {

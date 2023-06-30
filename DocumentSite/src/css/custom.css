@@ -3,6 +3,10 @@
  * bundles Infima by default. Infima is a CSS framework designed to
  * work well for content-centric websites.
  */
+ @font-face {
+  font-family: 'intel-one-mono';
+  src: url('../../static/fonts/intelone-mono-font-family-regular.ttf') format('truetype');
+}
 
 /* You can override the default Infima variables here. */
 :root {
