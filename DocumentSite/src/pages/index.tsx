@@ -1,18 +1,14 @@
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
-import { Col, Row, Space } from "antd";
-import Highlight, { Prism } from "prism-react-renderer";
-import React, { useRef } from "react";
+import { Space, Tabs } from "antd";
+import React from "react";
 import { TypeAnimation } from "react-type-animation";
-import theme from "prism-react-renderer/themes/nightOwl";
+import { CodeBlock } from "../components/code-block";
 
 export default function Home(): JSX.Element {
     const { siteConfig } = useDocusaurusContext();
 
-    const codeBlockHeight = "500px";
-
-    const ref = useRef<Highlight>();
-
+    const codeBlockHeight = "450px";
     return (
         <Layout title={`${siteConfig.title}`} description="MAUI App source generator">
             <div>
@@ -23,52 +19,52 @@ export default function Home(): JSX.Element {
                         justifyContent: "center",
                         alignItems: "center",
                         textAlign: "center",
-                        backgroundColor: "var(--ifm-color-primary-darkest)",
                     }}
-                    className="margin-top--xl margin-bottom--md padding--xl"
+                    className="margin-vert--lg"
+                    size={50}
                 >
                     <TypeAnimation
                         sequence={[`I spent hours to save your moments.`, 1000, "", 1000]}
                         repeat={Infinity}
-                        style={{ fontFamily: "intel-one-mono", fontSize: "1.5rem", color: "white" }}
+                        style={{
+                            fontFamily: "intel-one-mono",
+                            fontSize: "2rem",
+                            textDecoration: "underline",
+                            textUnderlineOffset: "1rem",
+                        }}
                     />
+
+                    <p>Help you to create MAUI components without hundred lines of code as normal way.</p>
                 </Space>
 
-                <Row justify={"center"}>
-                    <Col className="margin-horiz--md">
-                        <Highlight language="csharp" code={appCode} Prism={Prism} theme={theme} ref={ref}>
-                            {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                                <pre style={{ ...style, height: codeBlockHeight }}>
-                                    {tokens.map((line, i) => (
-                                        <div key={i} {...getLineProps({ line })}>
-                                            <span>{i + 1}</span>
-                                            {line.map((token, key) => (
-                                                <span key={key} {...getTokenProps({ token })} />
-                                            ))}
-                                        </div>
-                                    ))}
-                                </pre>
-                            )}
-                        </Highlight>
-                    </Col>
-
-                    <Col className="margin-horiz--md" style={{ height: "500px" }}>
-                        <Highlight language="csharp" code={generatedCode} Prism={Prism} theme={theme}>
-                            {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                                <pre style={{ ...style, height: codeBlockHeight }}>
-                                    {tokens.map((line, i) => (
-                                        <div key={i} {...getLineProps({ line })}>
-                                            <span>{i + 1}</span>
-                                            {line.map((token, key) => (
-                                                <span key={key} {...getTokenProps({ token })} />
-                                            ))}
-                                        </div>
-                                    ))}
-                                </pre>
-                            )}
-                        </Highlight>
-                    </Col>
-                </Row>
+                <Tabs
+                    defaultActiveKey="1"
+                    centered
+                    className="container"
+                    type="line"
+                    items={[
+                        {
+                            label: "My Code",
+                            key: "1",
+                            children: (
+                                <CodeBlock
+                                    language="csharp"
+                                    code={appCode}
+                                    codeBlockHeight={codeBlockHeight}
+                                    highlightLinePredicate={(line) => line.match(/\[(BindableProp.*?)\]/g) !== null}
+                                    highlightLineColor="rgba(255, 255, 255, 0.1)"
+                                />
+                            ),
+                        },
+                        {
+                            label: "Generated Code",
+                            key: "2",
+                            children: (
+                                <CodeBlock language="csharp" code={generatedCode} codeBlockHeight={codeBlockHeight} />
+                            ),
+                        },
+                    ]}
+                />
             </div>
         </Layout>
     );
@@ -77,87 +73,85 @@ export default function Home(): JSX.Element {
 const appCode = `
     using BindableProps;
 
-    namespace MyMauiApp.Controls
+    namespace MyMauiApp.Controls;
+
+    public partial class NovelReview : ContentView
     {
-        // Notice: Your class must be partial class
-        public partial class TextInput : ContentView
+        [BindableProp(DefaultBindingMode = (int)BindingMode.OneTime)]
+        private string _name = "Kafka On The Shore";
+        
+        [BindableProp]
+        private string _author = "Haruki Murakami";
+
+        public NovelReview()
         {
-            [BindableProp]
-            string text;
-
-            [BindableProp]
-            string placeHolder;
-
-
-            public TextInput()
-            {
-                // This piece is same as above
-            }
+            
         }
     }
 `;
 
 const generatedCode = `
+    // <auto-generated/>
     using BindableProps;
 
     namespace MyMauiApp.Controls
     {
-        public partial class TextInput
+        public partial class NovelReview
         {
 
-            public static readonly BindableProperty TextProperty = BindableProperty.Create(
-                nameof(Text),
+            public  static readonly BindableProperty NameProperty = BindableProperty.Create(
+                nameof(Name),
                 typeof(string),
-                typeof(TextInput),
-                default,
-                (BindingMode)0,
+                typeof(NovelReview),
+                "Kafka On The Shore",
+                (BindingMode)(int)BindingMode.OneTime,
                 null,
-                (bindable, oldValue, newValue) =>
-                            ((TextInput)bindable).Text = (string)newValue,
+                (bindable, oldValue, newValue) => 
+                            ((NovelReview)bindable).Name = (string)newValue,
                 null,
                 null,
                 null
             );
 
-            public string Text
+            public  string Name
             {
-                get => text;
-                set
-                {
-                    OnPropertyChanging(nameof(Text));
+                get => _name;
+                set 
+                { 
+                    OnPropertyChanging(nameof(Name));
 
-                    text = value;
-                    SetValue(TextInput.TextProperty, text);
+                    _name = value;
+                    SetValue(NovelReview.NameProperty, _name);
 
-                    OnPropertyChanged(nameof(Text));
+                    OnPropertyChanged(nameof(Name));
                 }
             }
 
-            public static readonly BindableProperty PlaceHolderProperty = BindableProperty.Create(
-                nameof(PlaceHolder),
+            public  static readonly BindableProperty AuthorProperty = BindableProperty.Create(
+                nameof(Author),
                 typeof(string),
-                typeof(TextInput),
-                default,
+                typeof(NovelReview),
+                "Haruki Murakami",
                 (BindingMode)0,
                 null,
-                (bindable, oldValue, newValue) =>
-                            ((TextInput)bindable).PlaceHolder = (string)newValue,
+                (bindable, oldValue, newValue) => 
+                            ((NovelReview)bindable).Author = (string)newValue,
                 null,
                 null,
                 null
             );
 
-            public string PlaceHolder
+            public  string Author
             {
-                get => placeHolder;
-                set
-                {
-                    OnPropertyChanging(nameof(PlaceHolder));
+                get => _author;
+                set 
+                { 
+                    OnPropertyChanging(nameof(Author));
 
-                    placeHolder = value;
-                    SetValue(TextInput.PlaceHolderProperty, placeHolder);
+                    _author = value;
+                    SetValue(NovelReview.AuthorProperty, _author);
 
-                    OnPropertyChanged(nameof(PlaceHolder));
+                    OnPropertyChanged(nameof(Author));
                 }
             }
 
