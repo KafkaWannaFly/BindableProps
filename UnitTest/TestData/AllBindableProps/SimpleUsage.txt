@@ -1,0 +1,14 @@
+﻿[AllBindableProps]
+public partial class MyClass
+{
+    // Default field
+    string text;
+
+    // Support field with a default value
+    string placeHolder = "Do you trust me?";
+    
+    public TextInput()
+    {
+        InitializeComponent();
+    }
+}

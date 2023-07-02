@@ -1,0 +1,40 @@
+# https://github.com/marketplace/actions/publish-nuget
+name: CI/CD
+on:
+  push:
+    branches:
+      - master
+jobs:
+  unit-test:
+    name: Unit Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Run unit tests
+        uses: zyborg/dotnet-tests-report@v1
+        with:
+          project_path: UnitTest/
+          report_name: unit-test-report
+          report_title: Unit Test Report
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          fail_build_on_failed_tests: true
+          msbuild_verbosity: minimal
+          gist_name: bindable_props_tests.md
+          gist_badge_label: 'Bindable Props: %Counters_passed%/%Counters_total%'
+          gist_token: ${{ secrets.GIST_TOKEN }}
+          
+  publish:
+    name: Build, Pack & Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # Publish
+      - name: Publish
+        id: publish_nuget
+        uses: alirezanet/publish-nuget@v3.1.0
+        with:
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: BindableProps/BindableProps.csproj
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
