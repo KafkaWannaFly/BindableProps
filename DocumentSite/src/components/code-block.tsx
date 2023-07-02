@@ -20,10 +20,7 @@ export const CodeBlock = ({
     return (
         <Highlight Prism={Prism} language={language as Language} code={code} theme={theme}>
             {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                <pre
-                    key={tokens.toString()}
-                    style={{ ...style, height: codeBlockHeight, fontFamily: "intel-one-mono" }}
-                >
+                <pre key={tokens.toString()} style={{ ...style, height: codeBlockHeight, fontFamily: "monospace" }}>
                     {tokens.map((line, i) => {
                         const codeLindeStr = line
                             .map((i) => i.content)

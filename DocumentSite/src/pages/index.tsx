@@ -24,10 +24,10 @@ export default function Home(): JSX.Element {
                     size={50}
                 >
                     <TypeAnimation
-                        sequence={[`I spent hours to save your moments.`, 1000, "", 1000]}
+                        sequence={[`"I spent hours to save your moments." - Kafka Wanna Fly`, 1000, "", 1000]}
                         repeat={Infinity}
                         style={{
-                            fontFamily: "intel-one-mono",
+                            fontFamily: "monospace",
                             fontSize: "2rem",
                             textDecoration: "underline",
                             textUnderlineOffset: "1rem",
