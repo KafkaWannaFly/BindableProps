@@ -5,7 +5,7 @@
  */
  @font-face {
   font-family: 'intel-one-mono';
-  src: url('../../static/fonts/intelone-mono-font-family-regular.ttf') format('truetype');
+  src: url('intelone-mono-font-family-regular.ttf') format('truetype');
 }
 
 /* You can override the default Infima variables here. */
