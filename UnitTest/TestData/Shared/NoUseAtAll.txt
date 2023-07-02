@@ -1,9 +1,0 @@
-﻿namespace UnitTest.TestData.BindablePropTest
-{
-    public partial class MyClass
-    {
-        string title;
-
-        string description = "To the moon";
-    }
-}
