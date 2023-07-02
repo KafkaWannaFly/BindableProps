@@ -15,10 +15,12 @@ jobs:
               with:
                   node-version: 18
                   cache: yarn
+                  cache-dependency-path: DocumentSite/yarn.lock
 
             - name: Install dependencies
               working-directory: ./DocumentSite
               run: yarn install --frozen-lockfile
+
             - name: Build website
               working-directory: ./DocumentSite
               run: yarn build
