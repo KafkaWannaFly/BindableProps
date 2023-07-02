@@ -15,11 +15,13 @@ const config = {
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
-    organizationName: "Kafka Wanna Fly", // Usually your GitHub org/user name.
+    organizationName: "KafkaWannaFly", // Usually your GitHub org/user name.
     projectName: "BindableProps", // Usually your repo name.
+    deploymentBranch: "master",
 
     onBrokenLinks: "throw",
     onBrokenMarkdownLinks: "warn",
+    trailingSlash: false,
 
     // Even if you don't use internalization, you can use this field to set useful
     // metadata like html lang. For example, if your site is Chinese, you may want
@@ -72,26 +74,6 @@ const config = {
             },
             footer: {
                 style: "dark",
-                links: [
-                    {
-                        title: "Docs",
-                        items: [
-                            {
-                                label: "Documentation",
-                                to: "/docs/intro",
-                            },
-                        ],
-                    },
-                    {
-                        title: "More",
-                        items: [
-                            {
-                                label: "GitHub",
-                                href: "https://github.com/KafkaWannaFly/BindableProps",
-                            },
-                        ],
-                    },
-                ],
                 copyright: `Copyright © ${new Date().getFullYear()} BindableProps, Inc. Built with Docusaurus.`,
             },
             prism: {
