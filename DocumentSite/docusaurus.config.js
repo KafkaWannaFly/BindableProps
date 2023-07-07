@@ -57,6 +57,20 @@ const config = {
         ({
             // Replace with your project's social card
             image: "img/docusaurus-social-card.jpg",
+            metadata: [
+                {
+                    name: "dotnet maui",
+                    content: "Library, helper, utility, open source"
+                },
+                {
+                    name: "source generator",
+                    content: "Source generator for BindableProperty"
+                },
+                {
+                    name: "author",
+                    content: "KafkaWannaFly"
+                }
+            ],
             navbar: {
                 title: "BindableProps",
                 logo: {

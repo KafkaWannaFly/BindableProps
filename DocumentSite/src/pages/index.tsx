@@ -20,8 +20,8 @@ export default function Home(): JSX.Element {
                         alignItems: "center",
                         textAlign: "center",
                     }}
-                    className="margin-vert--lg"
-                    size={50}
+                    className="margin-vert--lg container"
+                    size={48}
                 >
                     <TypeAnimation
                         sequence={[`"I spent hours to save your moments." - Kafka Wanna Fly`, 1000, "", 1000]}
@@ -34,37 +34,60 @@ export default function Home(): JSX.Element {
                         }}
                     />
 
-                    <p>Help you to create MAUI components without hundred lines of code as normal way.</p>
+                    <p>
+                        This library is a source generator. <code>BindableProps</code> helps you to create MAUI
+                        components much faster than the standard way. It saves your time and is an essential part of
+                        every MAUI project.
+                    </p>
                 </Space>
 
-                <Tabs
-                    defaultActiveKey="1"
-                    centered
-                    className="container"
-                    type="line"
-                    items={[
-                        {
-                            label: "My Code",
-                            key: "1",
-                            children: (
-                                <CodeBlock
-                                    language="csharp"
-                                    code={appCode}
-                                    codeBlockHeight={codeBlockHeight}
-                                    highlightLinePredicate={(line) => line.match(/\[(BindableProp.*?)\]/g) !== null}
-                                    highlightLineColor="rgba(255, 255, 255, 0.1)"
-                                />
-                            ),
-                        },
-                        {
-                            label: "Generated Code",
-                            key: "2",
-                            children: (
-                                <CodeBlock language="csharp" code={generatedCode} codeBlockHeight={codeBlockHeight} />
-                            ),
-                        },
-                    ]}
-                />
+                <div
+                    style={{
+                        backgroundImage: "url('img/lion.png')",
+                    }}
+                >
+                    <Tabs
+                        defaultActiveKey="1"
+                        centered
+                        className="container"
+                        type="line"
+                        tabBarStyle={{
+                            backgroundColor: "var(--ifm-background-color)",
+                            marginBottom: 0,
+                            borderRadius: 8,
+                            color: "var(--ifm-font-color-base)",
+                            // width: "100%",
+                        }}
+                        items={[
+                            {
+                                label: "My Code",
+                                key: "1",
+                                children: (
+                                    <CodeBlock
+                                        key={1}
+                                        language="csharp"
+                                        code={appCode}
+                                        codeBlockHeight={codeBlockHeight}
+                                        highlightLinePredicate={(line) => line.match(/\[(BindableProp.*?)\]/g) !== null}
+                                        highlightLineColor="rgba(255, 255, 255, 0.1)"
+                                    />
+                                ),
+                            },
+                            {
+                                label: "Generated Code",
+                                key: "2",
+                                children: (
+                                    <CodeBlock
+                                        key={2}
+                                        language="csharp"
+                                        code={generatedCode}
+                                        codeBlockHeight={codeBlockHeight}
+                                    />
+                                ),
+                            },
+                        ]}
+                    />
+                </div>
             </div>
         </Layout>
     );

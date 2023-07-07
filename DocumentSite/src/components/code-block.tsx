@@ -18,7 +18,7 @@ export const CodeBlock = ({
     highlightLineColor,
 }: CodeBlockProps) => {
     return (
-        <Highlight Prism={Prism} language={language as Language} code={code} theme={theme}>
+        <Highlight key={Math.random() * 100} Prism={Prism} language={language as Language} code={code} theme={theme}>
             {({ className, style, tokens, getLineProps, getTokenProps }) => (
                 <pre key={tokens.toString()} style={{ ...style, height: codeBlockHeight, fontFamily: "monospace" }}>
                     {tokens.map((line, i) => {
@@ -37,7 +37,7 @@ export const CodeBlock = ({
                                             : "inherit",
                                 }}
                             >
-                                <span>{i + 1}</span>
+                                <span key={i}>{i + 1}</span>
                                 {line.map((token, key) => (
                                     <span key={key} {...getTokenProps({ token })} />
                                 ))}
