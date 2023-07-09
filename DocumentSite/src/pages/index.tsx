@@ -56,7 +56,6 @@ export default function Home(): JSX.Element {
                             marginBottom: 0,
                             borderRadius: 8,
                             color: "var(--ifm-font-color-base)",
-                            // width: "100%",
                         }}
                         items={[
                             {
