@@ -66,7 +66,11 @@ namespace BindablePropsSG.Generators
                         symbol,
                         ignoredAttributes)
                     )
-                    .Where(item => item is not null && !item.IsStatic)
+                    .Where(item =>
+                    {
+                        var fieldSymbol = item as IFieldSymbol;
+                        return fieldSymbol is not null && !item.IsStatic && !fieldSymbol.IsReadOnly;
+                    })
                     .Select(fieldSymbol =>
                     {
                         var variableDeclaratorSyntax = SyntaxUtil.FindSyntaxBySymbol(classSyntax, fieldSymbol!);

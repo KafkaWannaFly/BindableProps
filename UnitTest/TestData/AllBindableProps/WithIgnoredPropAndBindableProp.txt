@@ -16,6 +16,8 @@ public partial class MyClass
 
     [IgnoredProp]
     bool isBusy; // Don't touch!
+    
+    private readonly Frame controlFrame;
 
     // If you have existing props, we don't touch them
     public static readonly BindableProperty ErrorProperty = BindableProperty.Create(
