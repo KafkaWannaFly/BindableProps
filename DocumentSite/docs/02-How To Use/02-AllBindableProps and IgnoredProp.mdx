@@ -25,10 +25,12 @@ public partial class TextInput : ContentView
         )]
     string message = "With every cell in my body!";
 
+    // highlight-start
     [IgnoredProp]
     bool isBusy; // Don't touch!
 
     private readonly Frame controlFrame; // Not touch either
+    // highlight-end
 
     // If you have existing props, we don't touch them
     public static readonly BindableProperty ErrorProperty = BindableProperty.Create(
