@@ -1,12 +1,28 @@
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import { Space, Tabs } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TypeAnimation } from "react-type-animation";
 import { CodeBlock } from "../components/code-block";
 
 export default function Home(): JSX.Element {
     const { siteConfig } = useDocusaurusContext();
+    const [latestVersion, setLatestVersion] = useState("1.3.9");
+    const [csProjSettingString, setCsProjSettingString] = useState("");
+
+    useEffect(() => {
+        fetch("https://api.nuget.org/v3-flatcontainer/BindableProps/index.json")
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                const versions = data.versions as string[];
+                setLatestVersion(versions[versions.length - 1]);
+            });
+    }, []);
+
+    useEffect(() => {
+        setCsProjSettingString(getCsProjSettingString(latestVersion));
+    }, [latestVersion]);
 
     const codeBlockHeight = "450px";
     return (
@@ -40,6 +56,32 @@ export default function Home(): JSX.Element {
                         every MAUI project.
                     </p>
                 </Space>
+
+                <div className="margin-vert--lg container">
+                    <p>
+                        <h4>Install with dotnet CLI</h4>
+                        <CodeBlock
+                            language="git"
+                            codeBlockHeight="auto"
+                            lineNumber={false}
+                            code={`dotnet add package BindableProps --version ${latestVersion}`}
+                        />
+                    </p>
+
+                    <p>
+                        <h4>
+                            Your <code>csproj</code> file should has this
+                        </h4>
+                        <CodeBlock
+                            language="xml"
+                            codeBlockHeight="auto"
+                            lineNumber={true}
+                            code={csProjSettingString}
+                            highlightLinePredicate={(line) => line.match("PackageReference") !== null}
+                            highlightLineColor="rgba(255, 255, 255, 0.1)"
+                        />
+                    </p>
+                </div>
 
                 <div
                     style={{
@@ -86,6 +128,7 @@ export default function Home(): JSX.Element {
                             },
                         ]}
                     />
+                    s
                 </div>
             </div>
         </Layout>
@@ -180,3 +223,13 @@ const generatedCode = `
         }
     }
 `;
+
+function getCsProjSettingString(version: string) {
+    return `
+    <Project Sdk="Microsoft.NET.Sdk">
+        <ItemGroup>
+            <PackageReference Include="BindableProps" Version="${version}" />
+        </ItemGroup>
+    </Project>
+    `;
+}

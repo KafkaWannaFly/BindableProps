@@ -6,6 +6,7 @@ interface CodeBlockProps {
     codeBlockHeight: string;
     language: string;
     code: string;
+    lineNumber?: boolean;
     highlightLinePredicate?: (line: string) => boolean;
     highlightLineColor?: string;
 }
@@ -16,6 +17,7 @@ export const CodeBlock = ({
     language,
     highlightLinePredicate,
     highlightLineColor,
+    lineNumber = true,
 }: CodeBlockProps) => {
     return (
         <Highlight key={Math.random() * 100} Prism={Prism} language={language as Language} code={code} theme={theme}>
@@ -37,7 +39,7 @@ export const CodeBlock = ({
                                             : "inherit",
                                 }}
                             >
-                                <span key={i}>{i + 1}</span>
+                                {lineNumber && <span key={i}>{i + 1}</span>}
                                 {line.map((token, key) => (
                                     <span key={key} {...getTokenProps({ token })} />
                                 ))}
