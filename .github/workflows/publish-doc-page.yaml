@@ -17,9 +17,12 @@ jobs:
                   cache: yarn
                   cache-dependency-path: DocumentSite/yarn.lock
 
+            - name: Upgrade Yarn
+              run: corepack enable && yarn set version berry
+              
             - name: Install dependencies
               working-directory: ./DocumentSite
-              run: yarn install --frozen-lockfile
+              run: yarn install
 
             - name: Build website
               working-directory: ./DocumentSite
