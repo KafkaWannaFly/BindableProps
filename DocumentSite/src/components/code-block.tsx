@@ -1,6 +1,6 @@
 import React from "react";
-import Highlight, { Language, Prism } from "prism-react-renderer";
-import theme from "prism-react-renderer/themes/nightOwl";
+import { Language, Prism, Highlight } from "prism-react-renderer";
+import { themes as prismThemes } from "prism-react-renderer";
 
 interface CodeBlockProps {
     codeBlockHeight: string;
@@ -20,7 +20,13 @@ export const CodeBlock = ({
     lineNumber = true,
 }: CodeBlockProps) => {
     return (
-        <Highlight key={Math.random() * 100} Prism={Prism} language={language as Language} code={code} theme={theme}>
+        <Highlight
+            key={Math.random() * 100}
+            prism={Prism}
+            language={language as Language}
+            code={code}
+            theme={prismThemes.nightOwl}
+        >
             {({ className, style, tokens, getLineProps, getTokenProps }) => (
                 <pre key={tokens.toString()} style={{ ...style, height: codeBlockHeight, fontFamily: "monospace" }}>
                     {tokens.map((line, i) => {
