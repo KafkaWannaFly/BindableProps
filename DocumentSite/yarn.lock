@@ -4404,15 +4404,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.10.5":
-  version: 20.10.5
-  resolution: "@types/node@npm:20.10.5"
-  dependencies:
-    undici-types: "npm:~5.26.4"
-  checksum: be30609aae0bfe492097815f166ccc07f465220cb604647fa4e5ec05a1d16c012a41b82b5f11ecfe2485cbb479d4d20384b95b809ca0bcff6d94d5bbafa645bb
-  languageName: node
-  linkType: hard
-
 "@types/parse-json@npm:^4.0.0":
   version: 4.0.0
   resolution: "@types/parse-json@npm:4.0.0"
@@ -6589,12 +6580,10 @@ __metadata:
     "@docusaurus/types": "npm:^3.0.1"
     "@mdx-js/react": "npm:^3.0.0"
     "@tsconfig/docusaurus": "npm:^2.0.2"
-    "@types/node": "npm:^20.10.5"
     "@types/prop-types": "npm:^15"
     "@types/react": "npm:^18.2.45"
     antd: "npm:^5.12.5"
     clsx: "npm:^2.0.0"
-    node: "npm:^21.2.0"
     prism-react-renderer: "npm:^2.3.1"
     prop-types: "npm:^15.8.1"
     react: "npm:^18.2.0"
@@ -10103,13 +10092,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-bin-setup@npm:^1.0.0":
-  version: 1.1.3
-  resolution: "node-bin-setup@npm:1.1.3"
-  checksum: 7de7d17aff7baa4e424f2b94ba14626b177620998d7bbe5bb28841a4e078d9c198a96edefb88f00e80a724f3d56907cdfb4be8af1c45e46b0f1476c26d828910
-  languageName: node
-  linkType: hard
-
 "node-emoji@npm:^2.1.0":
   version: 2.1.3
   resolution: "node-emoji@npm:2.1.3"
@@ -10160,17 +10142,6 @@ __metadata:
   version: 2.0.14
   resolution: "node-releases@npm:2.0.14"
   checksum: 199fc93773ae70ec9969bc6d5ac5b2bbd6eb986ed1907d751f411fef3ede0e4bfdb45ceb43711f8078bea237b6036db8b1bf208f6ff2b70c7d615afd157f3ab9
-  languageName: node
-  linkType: hard
-
-"node@npm:^21.2.0":
-  version: 21.2.0
-  resolution: "node@npm:21.2.0"
-  dependencies:
-    node-bin-setup: "npm:^1.0.0"
-  bin:
-    node: bin/node
-  checksum: 35536715459cca61cc0238694e8e593f0f307bbb3e389ab5f2118ccfceb679bca6fa1f9f243467f83ae2dcd08d8985639e6a42745e0ef4a5a1ea6caba76f48cf
   languageName: node
   linkType: hard
 
@@ -13487,13 +13458,6 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 1d0a5f4ce496c42caa9a30e659c467c5686eae15d54b027ee7866744952547f1be1262f2d40de911618c242b510029d51d43ff605dba8fb740ec85ca2d3f9500
-  languageName: node
-  linkType: hard
-
-"undici-types@npm:~5.26.4":
-  version: 5.26.5
-  resolution: "undici-types@npm:5.26.5"
-  checksum: bb673d7876c2d411b6eb6c560e0c571eef4a01c1c19925175d16e3a30c4c428181fb8d7ae802a261f283e4166a0ac435e2f505743aa9e45d893f9a3df017b501
   languageName: node
   linkType: hard
 

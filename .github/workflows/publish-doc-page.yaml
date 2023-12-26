@@ -11,18 +11,19 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
+
+            - name: Upgrade Yarn
+              run: corepack enable && yarn set version berry
+              
             - uses: actions/setup-node@v4
               with:
                   node-version: 20
                   cache: yarn
                   cache-dependency-path: DocumentSite/yarn.lock
-
-            - name: Upgrade Yarn
-              run: corepack enable && yarn set version berry
               
             - name: Install dependencies
               working-directory: ./DocumentSite
-              run: yarn install
+              run: yarn install --immutable
 
             - name: Build website
               working-directory: ./DocumentSite
