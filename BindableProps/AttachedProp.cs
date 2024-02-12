@@ -1,6 +1,10 @@
 ﻿namespace BindableProps;
 
-[AttributeUsage(AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
+/// <summary>
+/// Generate Attached Property for the field
+/// </summary>
+[AttributeUsage(AttributeTargets.Field)]
+// ReSharper disable once UnusedType.Global
 public sealed class AttachedProp : Attribute
 {
     public int DefaultBindingMode { get; set; }
