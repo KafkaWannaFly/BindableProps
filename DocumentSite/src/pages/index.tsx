@@ -11,12 +11,15 @@ export default function Home(): JSX.Element {
     const [csProjSettingString, setCsProjSettingString] = useState("");
 
     useEffect(() => {
-        fetch("https://api.nuget.org/v3-flatcontainer/BindableProps/index.json")
+        fetch("https://api.nuget.org/v3/registration5-gz-semver2/bindableprops/index.json")
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
-                const versions = data.versions as string[];
-                setLatestVersion(versions[versions.length - 1]);
+                const version = data.items[0].upper as string;
+                setLatestVersion(version);
+            })
+            .catch((err) => {
+                setLatestVersion("1.3.9");
             });
     }, []);
 
