@@ -5,7 +5,7 @@
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     // ReSharper disable once UnusedType.Global
-    public sealed class BindableProp : Attribute
+    public class BindableProp : Attribute
     {
         public int DefaultBindingMode { get; set; }
 

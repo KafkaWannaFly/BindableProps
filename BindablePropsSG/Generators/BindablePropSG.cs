@@ -21,78 +21,34 @@ namespace BindablePropsSG.Generators
             SyntaxNode syntaxNode,
             ISymbol fieldSymbol)
         {
-            var fieldName = fieldSymbol.Name;
-            var propName = StringUtil.PascalCaseOf(fieldName);
-
-            if (propName.Length == 0 || propName == fieldName)
-            {
-                return;
-            }
-
-            var fieldSyntax = (FieldDeclarationSyntax)syntaxNode;
-            var fieldType = fieldSyntax.Declaration.Type;
-            
-            // typeof operation doesn't accept nullable data type
-            var unNullableDataType = fieldType.ToString();
-            if (unNullableDataType[unNullableDataType.Length - 1] == '?')
-            {
-                unNullableDataType = unNullableDataType.Substring(0, unNullableDataType.Length - 1);
-            }
-
-            var newKeyword = fieldSyntax.Modifiers
-                .FirstOrDefault(keyword => keyword.Text.Equals("new"));
-
-            var className = classSyntax.Identifier;
-
-            var defaultFieldValue = SyntaxUtil.GetFieldDefaultValue(fieldSyntax) ?? "default";
-
-            var attributeSyntax = SyntaxUtil.GetAttributeByName(fieldSyntax, "BindableProp");
-
-            var attributeArguments = attributeSyntax?.ArgumentList?.Arguments;
-
-            var defaultBindingMode = SyntaxUtil.GetAttributeParam(attributeArguments, "DefaultBindingMode") ?? "0";
-
-            var validateValueDelegate =
-                SyntaxUtil.GetAttributeParam(attributeArguments, "ValidateValueDelegate") ?? "null";
-
-            var propertyChangedDelegate = SyntaxUtil.GetAttributeParam(
-                attributeArguments, "PropertyChangedDelegate"
-            ) ?? @$"(bindable, oldValue, newValue) => 
-                        (({className})bindable).{propName} = ({fieldType})newValue";
-
-            var propertyChangingDelegate =
-                SyntaxUtil.GetAttributeParam(attributeArguments, "PropertyChangingDelegate") ?? "null";
-
-            var coerceValueDelegate = SyntaxUtil.GetAttributeParam(attributeArguments, "CoerceValueDelegate") ?? "null";
-
-            var createDefaultValueDelegate =
-                SyntaxUtil.GetAttributeParam(attributeArguments, "CreateDefaultValueDelegate") ?? "null";
+            var bindablePropParam =
+                SyntaxUtil.ExtractCreateBindablePropertyParam(classSyntax, syntaxNode, fieldSymbol, "BindableProp");
 
             source.Append($@"
-        public {newKeyword} static readonly BindableProperty {propName}Property = BindableProperty.Create(
-            nameof({propName}),
-            typeof({unNullableDataType}),
-            typeof({className}),
-            {defaultFieldValue},
-            (BindingMode){defaultBindingMode},
-            {validateValueDelegate},
-            {propertyChangedDelegate},
-            {propertyChangingDelegate},
-            {coerceValueDelegate},
-            {createDefaultValueDelegate}
+        public {bindablePropParam.NewKeyWord} static readonly BindableProperty {bindablePropParam.PropName}Property = BindableProperty.Create(
+            nameof({bindablePropParam.PropName}),
+            typeof({bindablePropParam.UnNullableFieldType}),
+            typeof({bindablePropParam.ClassType}),
+            {bindablePropParam.DefaultValue},
+            (BindingMode){bindablePropParam.BindingMode},
+            {bindablePropParam.ValidateValueDelegate},
+            {bindablePropParam.PropertyChangedDelegate},
+            {bindablePropParam.PropertyChangingDelegate},
+            {bindablePropParam.CoerceValueDelegate},
+            {bindablePropParam.CreateDefaultValueDelegate}
         );
 
-        public {newKeyword} {fieldType} {propName}
+        public {bindablePropParam.NewKeyWord} {bindablePropParam.FieldType} {bindablePropParam.PropName}
         {{
-            get => {fieldName};
+            get => {bindablePropParam.FieldName};
             set 
             {{ 
-                OnPropertyChanging(nameof({propName}));
+                OnPropertyChanging(nameof({bindablePropParam.PropName}));
 
-                {fieldName} = value;
-                SetValue({className}.{propName}Property, {fieldName});
+                {bindablePropParam.FieldName} = value;
+                SetValue({bindablePropParam.ClassType}.{bindablePropParam.PropName}Property, {bindablePropParam.FieldName});
 
-                OnPropertyChanged(nameof({propName}));
+                OnPropertyChanged(nameof({bindablePropParam.PropName}));
             }}
         }}
 ");

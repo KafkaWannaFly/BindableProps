@@ -115,5 +115,68 @@ namespace BindablePropsSG.Utils
                 _ => paramSyntax?.Expression.ToString()
             };
         }
+
+        public static string GetDefaultOnChangedDelegate(string classType, string propName, string fieldType)
+        {
+            return $"(bindable, oldValue, newValue) => (({classType})bindable).{propName} = ({fieldType})newValue";
+        }
+
+        public static BindablePropertyParam ExtractCreateBindablePropertyParam(
+            ClassDeclarationSyntax classSyntax,
+            SyntaxNode syntaxNode,
+            ISymbol fieldSymbol,
+            string attributeName
+        )
+        {
+            var fieldName = fieldSymbol.Name;
+            var propName = StringUtil.PascalCaseOf(fieldName);
+
+            var fieldSyntax = (FieldDeclarationSyntax)syntaxNode;
+            var fieldType = fieldSyntax.Declaration.Type.ToString();
+
+            var newKeyword = fieldSyntax.Modifiers
+                .FirstOrDefault(keyword => keyword.Text.Equals("new")).ToString();
+
+            var classType = classSyntax.Identifier.ToString();
+
+            var defaultFieldValue = SyntaxUtil.GetFieldDefaultValue(fieldSyntax) ?? "default";
+
+            var attributeSyntax = SyntaxUtil.GetAttributeByName(fieldSyntax, attributeName);
+
+            var attributeArguments = attributeSyntax?.ArgumentList?.Arguments;
+
+            var defaultBindingMode = SyntaxUtil.GetAttributeParam(attributeArguments, "DefaultBindingMode") ?? "0";
+
+            var validateValueDelegate =
+                SyntaxUtil.GetAttributeParam(attributeArguments, "ValidateValueDelegate") ?? "null";
+
+            var propertyChangedDelegate = SyntaxUtil.GetAttributeParam(
+                attributeArguments, "PropertyChangedDelegate"
+            ) ?? GetDefaultOnChangedDelegate(classType, propName, fieldType);
+
+            var propertyChangingDelegate =
+                SyntaxUtil.GetAttributeParam(attributeArguments, "PropertyChangingDelegate") ?? "null";
+
+            var coerceValueDelegate = SyntaxUtil.GetAttributeParam(attributeArguments, "CoerceValueDelegate") ?? "null";
+
+            var createDefaultValueDelegate =
+                SyntaxUtil.GetAttributeParam(attributeArguments, "CreateDefaultValueDelegate") ?? "null";
+
+            return new BindablePropertyParam()
+            {
+                ClassType = classType,
+                FieldType = fieldType,
+                FieldName = fieldName,
+                PropName = propName,
+                NewKeyWord = newKeyword,
+                DefaultValue = defaultFieldValue,
+                BindingMode = defaultBindingMode,
+                PropertyChangedDelegate = propertyChangedDelegate,
+                PropertyChangingDelegate = propertyChangingDelegate,
+                CoerceValueDelegate = coerceValueDelegate,
+                ValidateValueDelegate = validateValueDelegate,
+                CreateDefaultValueDelegate = createDefaultValueDelegate
+            };
+        }
     }
 }
