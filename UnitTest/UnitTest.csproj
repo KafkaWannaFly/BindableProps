@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
+
+      <LangVersion>default</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,6 +37,9 @@
 
 	<ItemGroup>
 	  <None Update="TestData\**\*.txt">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+        <None Update="TestData\BindableReadOnlyProp\SimpleUsage.expected.txt">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

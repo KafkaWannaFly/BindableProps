@@ -13,14 +13,16 @@ namespace BindablePropsSG.Generators
     [SuppressMessage("ReSharper", "HeapView.BoxingAllocation")]
     public class AllBindablePropsSG : BaseGenerator
     {
-        private readonly List<string> ignoredAttributes = new()
+        private readonly HashSet<string> ignoredAttributes = new()
         {
             "IgnoredProp",
             "BindableProp",
             "IgnoredPropAttribute",
             "BindablePropAttribute",
             "AttachedProp",
-            "AttachedPropAttribute"
+            "AttachedPropAttribute",
+            "BindableReadOnlyProp",
+            "BindableReadOnlyPropAttribute"
         };
 
         protected override IEnumerable<string> TargetAttributes => new[]
@@ -112,9 +114,9 @@ namespace {namespaceName}
                 ProcessField(source, classSyntax, fieldDeclarationSyntax, symbol);
             }
 
-            source.Append(@$"
-    }}
-}}
+            source.Append(@"
+    }
+}
 ");
 
             return source.ToString();

@@ -1,0 +1,17 @@
+namespace UnitTest.TestData.UnitTest
+{
+    public partial class SimpleUsage
+    {
+        [BindableReadOnlyProp]
+        string title;
+
+        [BindableReadOnlyProp]
+        string _description = "To the moon";
+        
+        [BindableReadOnlyProp]
+        string? sideNote;
+        
+        [BindableReadOnlyProp]
+        private new SizeF _size;
+    }
+}
