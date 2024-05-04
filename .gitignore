@@ -351,3 +351,4 @@ MigrationBackup/
 
 .idea/
 node_modules
+_tmp/test-results.trx

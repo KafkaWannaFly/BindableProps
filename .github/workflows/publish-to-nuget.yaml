@@ -29,6 +29,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           fail_build_on_failed_tests: false
           no_build: true
+          msbuild_configuration: Release
           extra_test_parameters: --filter Displayname!~BaseTest
   publish:
     name: Build, Pack & Publish
