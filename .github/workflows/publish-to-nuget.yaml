@@ -17,9 +17,9 @@ jobs:
         run: pwd
 
       - name: Run unit tests
-        uses: zyborg/dotnet-tests-report@v1
+        uses: zyborg/dotnet-tests-report@v1.4.4
         with:
-          project_path: ./UnitTest/
+          project_path: UnitTest/UnitTest.csproj
           report_name: unit-test-report
           report_title: Unit Test Report
           github_token: ${{ secrets.GITHUB_TOKEN }}
