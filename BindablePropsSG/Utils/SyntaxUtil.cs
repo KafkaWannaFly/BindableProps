@@ -75,7 +75,7 @@ namespace BindablePropsSG.Utils
             return syntax;
         }
 
-        public static AttributeSyntax? GetAttributeByName(FieldDeclarationSyntax fieldSyntax, string attributeName)
+        private static AttributeSyntax? GetAttributeByName(FieldDeclarationSyntax fieldSyntax, string attributeName)
         {
             var attributeSyntax = fieldSyntax.AttributeLists
                 .FirstOrDefault(attrList =>
@@ -89,7 +89,7 @@ namespace BindablePropsSG.Utils
             return attributeSyntax;
         }
 
-        public static string? GetFieldDefaultValue(FieldDeclarationSyntax fieldSyntax)
+        private static string? GetFieldDefaultValue(FieldDeclarationSyntax fieldSyntax)
         {
             var variableDeclaration = fieldSyntax.DescendantNodesAndSelf()
                 .OfType<VariableDeclarationSyntax>()
@@ -99,7 +99,7 @@ namespace BindablePropsSG.Utils
             return initializer?.Value.ToString();
         }
 
-        public static string? GetAttributeParam(SeparatedSyntaxList<AttributeArgumentSyntax>? attributeArguments,
+        private static string? GetAttributeParam(SeparatedSyntaxList<AttributeArgumentSyntax>? attributeArguments,
             string paramName)
         {
             var paramSyntax = attributeArguments?.FirstOrDefault(
@@ -118,7 +118,8 @@ namespace BindablePropsSG.Utils
 
         public static string GetDefaultOnChangedDelegate(string classType, string propName, string fieldType)
         {
-            return $"(bindable, oldValue, newValue) => (({classType})bindable).{propName} = ({fieldType})newValue";
+            return @$"(bindable, oldValue, newValue) => 
+                        (({classType})bindable).{propName} = ({fieldType})newValue";
         }
 
         public static BindablePropertyParam ExtractCreateBindablePropertyParam(
