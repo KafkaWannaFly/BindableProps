@@ -28,9 +28,10 @@ public partial class TextInput : ContentView
     // highlight-start
     [IgnoredProp]
     bool isBusy; // Don't touch!
+    // highlight-end
 
     private readonly Frame controlFrame; // Not touch either
-    // highlight-end
+    
 
     // If you have existing props, we don't touch them
     public static readonly BindableProperty ErrorProperty = BindableProperty.Create(
