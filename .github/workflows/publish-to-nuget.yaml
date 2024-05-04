@@ -15,6 +15,8 @@ jobs:
 
       - name: Current directory
         run: pwd
+      - name: List files
+        run: ls -la
 
       - name: Run unit tests
         uses: zyborg/dotnet-tests-report@v1.4.4
