@@ -54,11 +54,13 @@ namespace MyMauiApp.Controls;
 // Notice: Your class must be partial class
 public partial class TextInput : ContentView
 {
+    // highlight-start
     [BindableProp]
     string text;
 
     [BindableProp]
     string placeHolder;
+    // highlight-end
 
 
     public TextInput()

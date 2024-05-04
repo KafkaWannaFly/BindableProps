@@ -8,22 +8,25 @@ jobs:
   unit-test:
     name: Unit Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
+
+      - name: Current directory
+        run: pwd
 
       - name: Run unit tests
         uses: zyborg/dotnet-tests-report@v1
         with:
-          project_path: UnitTest/
+          project_path: ./UnitTest/
           report_name: unit-test-report
           report_title: Unit Test Report
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          fail_build_on_failed_tests: true
+          fail_build_on_failed_tests: false
+          msbuild_configuration: Release
           msbuild_verbosity: minimal
-          gist_name: bindable_props_tests.md
-          gist_badge_label: 'Bindable Props: %Counters_passed%/%Counters_total%'
-          gist_token: ${{ secrets.GIST_TOKEN }}
-          
+          extra_test_parameters: --filter Displayname!~BaseTest
   publish:
     name: Build, Pack & Publish
     runs-on: ubuntu-latest

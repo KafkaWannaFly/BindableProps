@@ -13,14 +13,16 @@ namespace BindablePropsSG.Generators
     [SuppressMessage("ReSharper", "HeapView.BoxingAllocation")]
     public class AllBindablePropsSG : BaseGenerator
     {
-        private readonly List<string> ignoredAttributes = new()
+        private readonly HashSet<string> ignoredAttributes = new()
         {
             "IgnoredProp",
             "BindableProp",
             "IgnoredPropAttribute",
             "BindablePropAttribute",
             "AttachedProp",
-            "AttachedPropAttribute"
+            "AttachedPropAttribute",
+            "BindableReadOnlyProp",
+            "BindableReadOnlyPropAttribute"
         };
 
         protected override IEnumerable<string> TargetAttributes => new[]
@@ -62,10 +64,7 @@ namespace BindablePropsSG.Generators
                     continue;
 
                 var fieldTuples = classSymbol.GetMembers()
-                    .Where(symbol => FieldNotIncludeAttributes(
-                        symbol,
-                        ignoredAttributes)
-                    )
+                    .Where(FieldNotIncludeAttributes)
                     .Where(item =>
                     {
                         var fieldSymbol = item as IFieldSymbol;
@@ -115,9 +114,9 @@ namespace {namespaceName}
                 ProcessField(source, classSyntax, fieldDeclarationSyntax, symbol);
             }
 
-            source.Append(@$"
-    }}
-}}
+            source.Append(@"
+    }
+}
 ");
 
             return source.ToString();
@@ -126,58 +125,39 @@ namespace {namespaceName}
         protected override void ProcessField(StringBuilder source, ClassDeclarationSyntax classDeclarationSyntax,
             SyntaxNode syntaxNode, ISymbol fieldSymbol)
         {
-            var fieldSyntax = (FieldDeclarationSyntax)syntaxNode;
-
-            var fieldName = fieldSymbol.Name;
-            var propName = StringUtil.PascalCaseOf(fieldName);
-            var dataType = fieldSyntax.Declaration.Type;
-
-            // typeof operation doesn't accept nullable data type
-            var unNullableDataType = dataType.ToString();
-            if (unNullableDataType[unNullableDataType.Length - 1] == '?')
-            {
-                unNullableDataType = unNullableDataType.Substring(0, unNullableDataType.Length - 1);
-            }
-            
-            var newKeyword = fieldSyntax.Modifiers
-                .FirstOrDefault(keyword => keyword.Text.Equals("new"));
-
-            var className = classDeclarationSyntax.Identifier.ToString();
-
-            var variableDeclaratorSyntax = fieldSyntax.ChildNodes().OfType<VariableDeclarationSyntax>().FirstOrDefault()
-                ?.Variables
-                .FirstOrDefault();
-            var defaultValue = variableDeclaratorSyntax?.Initializer?
-                .Value
-                .ToString() ?? "default";
+            var bindablePropParam = SyntaxUtil.ExtractCreateBindablePropertyParam(
+                classDeclarationSyntax,
+                syntaxNode,
+                fieldSymbol,
+                "Dummy Name That I Don't Care"
+            );
 
             source.Append($@"
-        public {newKeyword} static readonly BindableProperty {propName}Property = BindableProperty.Create(
-                    nameof({propName}),
-                    typeof({unNullableDataType}),
-                    typeof({className}),
-                    {defaultValue},
-                    propertyChanged: (bindable, oldValue, newValue) =>
-                                    (({className})bindable).{propName} = ({dataType})newValue
+        public {bindablePropParam.NewKeyWord} static readonly BindableProperty {bindablePropParam.PropName}Property = BindableProperty.Create(
+                    nameof({bindablePropParam.PropName}),
+                    typeof({bindablePropParam.UnNullableFieldType}),
+                    typeof({bindablePropParam.ClassType}),
+                    {bindablePropParam.DefaultValue},
+                    propertyChanged: {bindablePropParam.PropertyChangedDelegate}
                 );
 
-        public {newKeyword} {dataType} {propName}
+        public {bindablePropParam.NewKeyWord} {bindablePropParam.FieldType} {bindablePropParam.PropName}
         {{
-            get => {fieldName};
+            get => {bindablePropParam.FieldName};
             set 
             {{ 
-                OnPropertyChanging(nameof({propName}));
+                OnPropertyChanging(nameof({bindablePropParam.PropName}));
 
-                {fieldName} = value;
-                SetValue({className}.{propName}Property, {fieldName});
+                {bindablePropParam.FieldName} = value;
+                SetValue({bindablePropParam.ClassType}.{bindablePropParam.PropName}Property, {bindablePropParam.FieldName});
 
-                OnPropertyChanged(nameof({propName}));
+                OnPropertyChanged(nameof({bindablePropParam.PropName}));
             }}
         }}
 ");
         }
 
-        private bool FieldNotIncludeAttributes(ISymbol symbol, ICollection<string> attributeNames)
+        private bool FieldNotIncludeAttributes(ISymbol symbol)
         {
             if (symbol is IFieldSymbol fieldSymbol)
             {
@@ -185,7 +165,7 @@ namespace {namespaceName}
                     attribute =>
                     {
                         var name = attribute?.AttributeClass?.Name;
-                        return attributeNames.Contains(name!);
+                        return ignoredAttributes.Contains(name!);
                     }
                 ) is not true;
             }

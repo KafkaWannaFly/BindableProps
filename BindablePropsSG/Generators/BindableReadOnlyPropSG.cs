@@ -4,28 +4,30 @@ using BindablePropsSG.Utils;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace BindablePropsSG.Generators
+namespace BindablePropsSG.Generators;
+
+[Generator]
+[SuppressMessage("ReSharper", "InconsistentNaming")]
+public class BindableReadOnlyPropSG : BaseGenerator
 {
-    [Generator]
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
-    [SuppressMessage("ReSharper", "HeapView.BoxingAllocation")]
-    public class BindablePropSG : BaseGenerator
+    protected override IEnumerable<string> TargetAttributes => new[]
     {
-        protected override IEnumerable<string> TargetAttributes => new[]
-        {
-            "BindableProp",
-            "BindablePropAttribute"
-        };
+        "BindableReadOnlyProp",
+        "BindableReadOnlyPropAttribute"
+    };
 
-        protected override void ProcessField(StringBuilder source, ClassDeclarationSyntax classSyntax,
-            SyntaxNode syntaxNode,
-            ISymbol fieldSymbol)
-        {
-            var bindablePropParam =
-                SyntaxUtil.ExtractCreateBindablePropertyParam(classSyntax, syntaxNode, fieldSymbol, "BindableProp");
+    protected override void ProcessField(
+        StringBuilder source,
+        ClassDeclarationSyntax classSyntax,
+        SyntaxNode syntaxNode,
+        ISymbol fieldSymbol
+    )
+    {
+        var bindablePropParam =
+            SyntaxUtil.ExtractCreateBindablePropertyParam(classSyntax, syntaxNode, fieldSymbol, "BindableReadOnlyProp");
 
-            source.Append($@"
-        public {bindablePropParam.NewKeyWord} static readonly BindableProperty {bindablePropParam.PropName}Property = BindableProperty.Create(
+        source.Append($@"
+        public {bindablePropParam.NewKeyWord} static readonly BindablePropertyKey {bindablePropParam.PropName}PropertyKey = BindableProperty.CreateReadOnly(
             nameof({bindablePropParam.PropName}),
             typeof({bindablePropParam.UnNullableFieldType}),
             typeof({bindablePropParam.ClassType}),
@@ -38,20 +40,21 @@ namespace BindablePropsSG.Generators
             {bindablePropParam.CreateDefaultValueDelegate}
         );
 
+        public {bindablePropParam.NewKeyWord} static readonly BindableProperty {bindablePropParam.PropName}Property = {bindablePropParam.PropName}PropertyKey.BindableProperty;
+
         public {bindablePropParam.NewKeyWord} {bindablePropParam.FieldType} {bindablePropParam.PropName}
         {{
             get => {bindablePropParam.FieldName};
-            set 
+            private set 
             {{ 
                 OnPropertyChanging(nameof({bindablePropParam.PropName}));
 
                 {bindablePropParam.FieldName} = value;
-                SetValue({bindablePropParam.ClassType}.{bindablePropParam.PropName}Property, {bindablePropParam.FieldName});
+                SetValue({bindablePropParam.ClassType}.{bindablePropParam.PropName}PropertyKey, {bindablePropParam.FieldName});
 
                 OnPropertyChanged(nameof({bindablePropParam.PropName}));
             }}
         }}
 ");
-        }
     }
 }
