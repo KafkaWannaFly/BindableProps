@@ -11,7 +11,7 @@ namespace UnitTest.TestData.UnitTest
                     typeof(string),
                     typeof(SimpleUsage),
                     default,
-                    (BindingMode)0,
+                    (BindingMode)3,
                     null,
                     (bindable, oldValue, newValue) =>
                                 ((SimpleUsage)bindable).Title = (string)newValue,
@@ -41,7 +41,7 @@ namespace UnitTest.TestData.UnitTest
                     typeof(string),
                     typeof(SimpleUsage),
                     "To the moon",
-                    (BindingMode)0,
+                    (BindingMode)3,
                     null,
                     (bindable, oldValue, newValue) =>
                                 ((SimpleUsage)bindable).Description = (string)newValue,
@@ -71,7 +71,7 @@ namespace UnitTest.TestData.UnitTest
                     typeof(string),
                     typeof(SimpleUsage),
                     default,
-                    (BindingMode)0,
+                    (BindingMode)3,
                     null,
                     (bindable, oldValue, newValue) =>
                                 ((SimpleUsage)bindable).SideNote = (string?)newValue,
@@ -101,7 +101,7 @@ namespace UnitTest.TestData.UnitTest
                     typeof(SizeF),
                     typeof(SimpleUsage),
                     default,
-                    (BindingMode)0,
+                    (BindingMode)3,
                     null,
                     (bindable, oldValue, newValue) =>
                                 ((SimpleUsage)bindable).Size = (SizeF)newValue,

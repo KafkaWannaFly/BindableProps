@@ -26,6 +26,14 @@ public class BindableReadOnlyPropSG : BaseGenerator
         var bindablePropParam =
             SyntaxUtil.ExtractCreateBindablePropertyParam(classSyntax, syntaxNode, fieldSymbol, "BindableReadOnlyProp");
 
+        var fieldSyntax = (FieldDeclarationSyntax)syntaxNode;
+        var attributeSyntax = SyntaxUtil.GetAttributeByName(fieldSyntax, "BindableReadOnlyProp");
+        var attributeArguments = attributeSyntax?.ArgumentList?.Arguments;
+        // Default BindingMode is OneWayToSource instead of OneWay as usual
+        var defaultBindingMode = SyntaxUtil.GetAttributeParam(attributeArguments, "DefaultBindingMode") ?? "3";
+
+        bindablePropParam.BindingMode = defaultBindingMode;
+
         source.Append($@"
         public {bindablePropParam.NewKeyWord} static readonly BindablePropertyKey {bindablePropParam.PropName}PropertyKey = BindableProperty.CreateReadOnly(
             nameof({bindablePropParam.PropName}),
