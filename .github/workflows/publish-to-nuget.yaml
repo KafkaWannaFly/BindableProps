@@ -18,7 +18,11 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Build
-        run: dotnet build --configuration Release
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          command: dotnet build --configuration Release
 
       - name: Run unit tests
         uses: zyborg/dotnet-tests-report@v1.4.4
