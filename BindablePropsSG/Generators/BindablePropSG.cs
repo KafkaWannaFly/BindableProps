@@ -17,12 +17,12 @@ namespace BindablePropsSG.Generators
             "BindablePropAttribute"
         };
 
-        protected override void ProcessField(StringBuilder source, ClassDeclarationSyntax classSyntax,
+        protected override void ProcessField(StringBuilder source, TypeDeclarationSyntax typeDeclarationSyntax,
             SyntaxNode syntaxNode,
             ISymbol fieldSymbol)
         {
             var bindablePropParam =
-                SyntaxUtil.ExtractCreateBindablePropertyParam(classSyntax, syntaxNode, fieldSymbol, "BindableProp");
+                SyntaxUtil.ExtractCreateBindablePropertyParam(typeDeclarationSyntax, syntaxNode, fieldSymbol, "BindableProp");
 
             source.Append($@"
         public {bindablePropParam.NewKeyWord} static readonly BindableProperty {bindablePropParam.PropName}Property = BindableProperty.Create(

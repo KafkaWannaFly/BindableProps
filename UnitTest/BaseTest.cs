@@ -4,9 +4,9 @@ namespace UnitTest;
 
 public class BaseTest<TGenerator> where TGenerator : IIncrementalGenerator, new()
 {
-    protected IIncrementalGenerator _generator = new TGenerator();
+    private readonly IIncrementalGenerator _generator = new TGenerator();
 
-    virtual protected string GetDataFolder()
+    protected virtual string GetDataFolder()
     {
         return string.Empty;
     }

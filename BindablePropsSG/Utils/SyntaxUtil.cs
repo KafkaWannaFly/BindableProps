@@ -123,7 +123,7 @@ namespace BindablePropsSG.Utils
         }
 
         public static BindablePropertyParam ExtractCreateBindablePropertyParam(
-            ClassDeclarationSyntax classSyntax,
+            TypeDeclarationSyntax typeDeclarationSyntax,
             SyntaxNode syntaxNode,
             ISymbol fieldSymbol,
             string attributeName
@@ -138,7 +138,7 @@ namespace BindablePropsSG.Utils
             var newKeyword = fieldSyntax.Modifiers
                 .FirstOrDefault(keyword => keyword.Text.Equals("new")).ToString();
 
-            var classType = classSyntax.Identifier.ToString();
+            var classType = typeDeclarationSyntax.Identifier.ToString();
 
             var defaultFieldValue = GetFieldDefaultValue(fieldSyntax) ?? "default";
 

@@ -84,15 +84,15 @@ namespace BindablePropsSG.Generators
             }
         }
 
-        protected override string ProcessClass(ClassDeclarationSyntax? classSyntax,
+        protected override string ProcessClass(TypeDeclarationSyntax? typeDeclarationSyntax,
             List<(SyntaxNode, ISymbol)> syntaxSymbols)
         {
-            if (classSyntax is null || !syntaxSymbols.Any())
+            if (typeDeclarationSyntax is null || !syntaxSymbols.Any())
                 return string.Empty;
 
-            var usingDirectives = classSyntax.SyntaxTree.GetCompilationUnitRoot().Usings;
+            var usingDirectives = typeDeclarationSyntax.SyntaxTree.GetCompilationUnitRoot().Usings;
 
-            var namespaceSyntax = classSyntax.Parent as BaseNamespaceDeclarationSyntax;
+            var namespaceSyntax = typeDeclarationSyntax.Parent as BaseNamespaceDeclarationSyntax;
             var namespaceName = namespaceSyntax?.Name.ToString() ?? "global";
 
             var source = new StringBuilder($@"
@@ -103,7 +103,7 @@ namespace BindablePropsSG.Generators
 
 namespace {namespaceName}
 {{
-    public partial class {classSyntax.Identifier}
+    public partial class {typeDeclarationSyntax.Identifier}
     {{
 ");
 
@@ -111,7 +111,7 @@ namespace {namespaceName}
             {
                 // variableDeclaratorSyntax --> variableDeclarationSyntax --> fieldDeclarationSyntax
                 var fieldDeclarationSyntax = syntax.Parent?.Parent!;
-                ProcessField(source, classSyntax, fieldDeclarationSyntax, symbol);
+                ProcessField(source, typeDeclarationSyntax, fieldDeclarationSyntax, symbol);
             }
 
             source.Append(@"
@@ -122,11 +122,11 @@ namespace {namespaceName}
             return source.ToString();
         }
 
-        protected override void ProcessField(StringBuilder source, ClassDeclarationSyntax classDeclarationSyntax,
+        protected override void ProcessField(StringBuilder source, TypeDeclarationSyntax typeDeclarationSyntax,
             SyntaxNode syntaxNode, ISymbol fieldSymbol)
         {
             var bindablePropParam = SyntaxUtil.ExtractCreateBindablePropertyParam(
-                classDeclarationSyntax,
+                typeDeclarationSyntax,
                 syntaxNode,
                 fieldSymbol,
                 "Dummy Name That I Don't Care"

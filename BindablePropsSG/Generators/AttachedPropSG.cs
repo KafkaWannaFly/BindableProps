@@ -17,12 +17,12 @@ public class AttachedPropSG : BaseGenerator
         "AttachedPropAttribute"
     };
 
-    protected override void ProcessField(StringBuilder source, ClassDeclarationSyntax classSyntax,
+    protected override void ProcessField(StringBuilder source, TypeDeclarationSyntax typeDeclarationSyntax,
         SyntaxNode syntaxNode,
         ISymbol fieldSymbol)
     {
         var bindablePropParam =
-            SyntaxUtil.ExtractCreateBindablePropertyParam(classSyntax, syntaxNode, fieldSymbol, "AttachedProp");
+            SyntaxUtil.ExtractCreateBindablePropertyParam(typeDeclarationSyntax, syntaxNode, fieldSymbol, "AttachedProp");
 
         var defaultOnChangedDelegate = SyntaxUtil.GetDefaultOnChangedDelegate(
             bindablePropParam.ClassType!,

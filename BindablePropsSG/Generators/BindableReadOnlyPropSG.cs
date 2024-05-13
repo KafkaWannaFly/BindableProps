@@ -18,13 +18,13 @@ public class BindableReadOnlyPropSG : BaseGenerator
 
     protected override void ProcessField(
         StringBuilder source,
-        ClassDeclarationSyntax classSyntax,
+        TypeDeclarationSyntax typeDeclarationSyntax,
         SyntaxNode syntaxNode,
         ISymbol fieldSymbol
     )
     {
         var bindablePropParam =
-            SyntaxUtil.ExtractCreateBindablePropertyParam(classSyntax, syntaxNode, fieldSymbol, "BindableReadOnlyProp");
+            SyntaxUtil.ExtractCreateBindablePropertyParam(typeDeclarationSyntax, syntaxNode, fieldSymbol, "BindableReadOnlyProp");
 
         var fieldSyntax = (FieldDeclarationSyntax)syntaxNode;
         var attributeSyntax = SyntaxUtil.GetAttributeByName(fieldSyntax, "BindableReadOnlyProp");

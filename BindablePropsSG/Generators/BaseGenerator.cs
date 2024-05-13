@@ -59,9 +59,9 @@ public class BaseGenerator : IIncrementalGenerator
     {
         if (syntaxSymbols.IsDefaultOrEmpty)
             return;
-
-        var groupList = syntaxSymbols.GroupBy<(SyntaxNode, ISymbol), ClassDeclarationSyntax>(
-            fieldGroup => (ClassDeclarationSyntax)fieldGroup.Item1!.Parent!
+        
+        var groupList = syntaxSymbols.GroupBy<(SyntaxNode, ISymbol), TypeDeclarationSyntax>(
+            fieldGroup => (TypeDeclarationSyntax)fieldGroup.Item1!.Parent!
         );
 
         foreach (var group in groupList)
@@ -73,17 +73,17 @@ public class BaseGenerator : IIncrementalGenerator
         }
     }
 
-    protected virtual string ProcessClass(ClassDeclarationSyntax? classSyntax,
+    protected virtual string ProcessClass(TypeDeclarationSyntax? typeDeclarationSyntax,
         List<(SyntaxNode, ISymbol)> syntaxSymbols)
     {
-        if (classSyntax is null)
+        if (typeDeclarationSyntax is null)
         {
             return string.Empty;
         }
 
-        var usingDirectives = classSyntax.SyntaxTree.GetCompilationUnitRoot().Usings;
+        var usingDirectives = typeDeclarationSyntax.SyntaxTree.GetCompilationUnitRoot().Usings;
 
-        var namespaceSyntax = classSyntax.Parent as BaseNamespaceDeclarationSyntax;
+        var namespaceSyntax = typeDeclarationSyntax.Parent as BaseNamespaceDeclarationSyntax;
         var namespaceName = namespaceSyntax?.Name.ToString() ?? "global";
 
         var source = new StringBuilder($@"
@@ -94,13 +94,13 @@ public class BaseGenerator : IIncrementalGenerator
 
 namespace {namespaceName}
 {{
-    public partial class {classSyntax.Identifier}
+    public partial {typeDeclarationSyntax.Keyword.Text} {typeDeclarationSyntax.Identifier}
     {{
 ");
 
         foreach (var (syntax, symbol) in syntaxSymbols)
         {
-            ProcessField(source, classSyntax, syntax, symbol);
+            ProcessField(source, typeDeclarationSyntax, syntax, symbol);
         }
 
         source.Append(@$"
@@ -116,7 +116,7 @@ namespace {namespaceName}
         return string.Empty;
     }
 
-    protected virtual void ProcessField(StringBuilder source, ClassDeclarationSyntax classSyntax,
+    protected virtual void ProcessField(StringBuilder source, TypeDeclarationSyntax typeDeclarationSyntax,
         SyntaxNode fieldSyntax, ISymbol fieldSymbol)
     {
     }
