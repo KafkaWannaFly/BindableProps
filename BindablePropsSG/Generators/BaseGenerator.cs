@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using BindablePropsSG.Utils;
@@ -86,6 +87,17 @@ public class BaseGenerator : IIncrementalGenerator
         var namespaceSyntax = typeDeclarationSyntax.Parent as BaseNamespaceDeclarationSyntax;
         var namespaceName = namespaceSyntax?.Name.ToString() ?? "global";
 
+        var accessLevelKeyWords = typeDeclarationSyntax?.Modifiers
+            .Where(
+                modifier => modifier.IsKind(SyntaxKind.PrivateKeyword)
+                            || modifier.IsKind(SyntaxKind.PublicKeyword)
+                            || modifier.IsKind(SyntaxKind.InternalKeyword)
+                            || modifier.IsKind(SyntaxKind.ProtectedKeyword)
+            )
+            .Select(modifier => modifier.Text) ?? ImmutableList<string>.Empty;
+        var accessLevel = string.Join(" ", accessLevelKeyWords);
+            
+
         var source = new StringBuilder($@"
 #pragma warning disable
 
@@ -94,13 +106,13 @@ public class BaseGenerator : IIncrementalGenerator
 
 namespace {namespaceName}
 {{
-    public partial {typeDeclarationSyntax.Keyword.Text} {typeDeclarationSyntax.Identifier}
+    {accessLevel} partial {typeDeclarationSyntax.Keyword.Text} {typeDeclarationSyntax.Identifier}
     {{
 ");
 
         foreach (var (syntax, symbol) in syntaxSymbols)
         {
-            ProcessField(source, typeDeclarationSyntax, syntax, symbol);
+            ProcessField(source, typeDeclarationSyntax!, syntax, symbol);
         }
 
         source.Append(@$"
