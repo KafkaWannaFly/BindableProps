@@ -3874,7 +3874,7 @@ const RAW_RUNTIME_STATE =
           ["jiti", "npm:1.21.6"],\
           ["js-yaml", "npm:4.1.0"],\
           ["lodash", "npm:4.17.21"],\
-          ["micromatch", "npm:4.0.7"],\
+          ["micromatch", "npm:4.0.8"],\
           ["prompts", "npm:2.4.2"],\
           ["resolve-pathname", "npm:3.0.0"],\
           ["shelljs", "npm:0.8.5"],\
@@ -3907,7 +3907,7 @@ const RAW_RUNTIME_STATE =
           ["jiti", "npm:1.21.6"],\
           ["js-yaml", "npm:4.1.0"],\
           ["lodash", "npm:4.17.21"],\
-          ["micromatch", "npm:4.0.7"],\
+          ["micromatch", "npm:4.0.8"],\
           ["prompts", "npm:2.4.2"],\
           ["resolve-pathname", "npm:3.0.0"],\
           ["shelljs", "npm:0.8.5"],\
@@ -8319,7 +8319,7 @@ const RAW_RUNTIME_STATE =
           ["@nodelib/fs.walk", "npm:1.2.8"],\
           ["glob-parent", "npm:5.1.2"],\
           ["merge2", "npm:1.4.1"],\
-          ["micromatch", "npm:4.0.7"]\
+          ["micromatch", "npm:4.0.8"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -9405,7 +9405,7 @@ const RAW_RUNTIME_STATE =
           ["http-proxy", "npm:1.18.1"],\
           ["is-glob", "npm:4.0.3"],\
           ["is-plain-obj", "npm:3.0.0"],\
-          ["micromatch", "npm:4.0.7"]\
+          ["micromatch", "npm:4.0.8"]\
         ],\
         "packagePeers": [\
           "@types/express"\
@@ -11321,10 +11321,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["micromatch", [\
-      ["npm:4.0.7", {\
-        "packageLocation": "../../../.yarn/berry/cache/micromatch-npm-4.0.7-28fb7387ee-10c0.zip/node_modules/micromatch/",\
+      ["npm:4.0.8", {\
+        "packageLocation": "../../../.yarn/berry/cache/micromatch-npm-4.0.8-c9570e4aca-10c0.zip/node_modules/micromatch/",\
         "packageDependencies": [\
-          ["micromatch", "npm:4.0.7"],\
+          ["micromatch", "npm:4.0.8"],\
           ["braces", "npm:3.0.3"],\
           ["picomatch", "npm:2.3.1"]\
         ],\
