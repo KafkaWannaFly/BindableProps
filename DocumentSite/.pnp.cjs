@@ -3695,7 +3695,7 @@ const RAW_RUNTIME_STATE =
           ["nprogress", "npm:0.2.0"],\
           ["postcss", "npm:8.4.38"],\
           ["prism-react-renderer", "virtual:a7417c6700965777525d32507ff2ceaf152fa9a6ed11ad349a820158cb15c986bc22dd3d4b15fa47119ae773847e3b05f3425d23beef37eead4149e9f9e57e1e#npm:2.3.1"],\
-          ["prismjs", "npm:1.29.0"],\
+          ["prismjs", "npm:1.30.0"],\
           ["react", "npm:18.3.1"],\
           ["react-dom", "virtual:a7417c6700965777525d32507ff2ceaf152fa9a6ed11ad349a820158cb15c986bc22dd3d4b15fa47119ae773847e3b05f3425d23beef37eead4149e9f9e57e1e#npm:18.3.1"],\
           ["react-router-dom", "virtual:d896e39eb7ad0bad9defbd0b7030d7d849edee54866856e280ab2c04a18674dcb9ffd5d53ae20bc39fdb6fca800706643d6b8fe963245544280ba6b8d1740406#npm:5.3.4"],\
@@ -13183,10 +13183,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["prismjs", [\
-      ["npm:1.29.0", {\
-        "packageLocation": "../../../.yarn/berry/cache/prismjs-npm-1.29.0-6faa5b04b8-10c0.zip/node_modules/prismjs/",\
+      ["npm:1.30.0", {\
+        "packageLocation": "../../../.yarn/berry/cache/prismjs-npm-1.30.0-c3c5ff824c-10c0.zip/node_modules/prismjs/",\
         "packageDependencies": [\
-          ["prismjs", "npm:1.29.0"]\
+          ["prismjs", "npm:1.30.0"]\
         ],\
         "linkType": "HARD"\
       }]\
