@@ -27,7 +27,7 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
-          ["@babel/runtime", "npm:7.24.7"],\
+          ["@babel/runtime", "npm:7.27.0"],\
           ["@docusaurus/core", "virtual:a7417c6700965777525d32507ff2ceaf152fa9a6ed11ad349a820158cb15c986bc22dd3d4b15fa47119ae773847e3b05f3425d23beef37eead4149e9f9e57e1e#npm:3.4.0"],\
           ["@docusaurus/module-type-aliases", "virtual:a7417c6700965777525d32507ff2ceaf152fa9a6ed11ad349a820158cb15c986bc22dd3d4b15fa47119ae773847e3b05f3425d23beef37eead4149e9f9e57e1e#npm:3.4.0"],\
           ["@docusaurus/preset-classic", "virtual:a7417c6700965777525d32507ff2ceaf152fa9a6ed11ad349a820158cb15c986bc22dd3d4b15fa47119ae773847e3b05f3425d23beef37eead4149e9f9e57e1e#npm:3.4.0"],\
@@ -2988,6 +2988,14 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/@babel-runtime-npm-7.24.7-035e043b00-10c0.zip/node_modules/@babel/runtime/",\
         "packageDependencies": [\
           ["@babel/runtime", "npm:7.24.7"],\
+          ["regenerator-runtime", "npm:0.14.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:7.27.0", {\
+        "packageLocation": "../../../.yarn/berry/cache/@babel-runtime-npm-7.27.0-67ce9cb54f-10c0.zip/node_modules/@babel/runtime/",\
+        "packageDependencies": [\
+          ["@babel/runtime", "npm:7.27.0"],\
           ["regenerator-runtime", "npm:0.14.1"]\
         ],\
         "linkType": "HARD"\
@@ -7681,7 +7689,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["document-site", "workspace:."],\
-          ["@babel/runtime", "npm:7.24.7"],\
+          ["@babel/runtime", "npm:7.27.0"],\
           ["@docusaurus/core", "virtual:a7417c6700965777525d32507ff2ceaf152fa9a6ed11ad349a820158cb15c986bc22dd3d4b15fa47119ae773847e3b05f3425d23beef37eead4149e9f9e57e1e#npm:3.4.0"],\
           ["@docusaurus/module-type-aliases", "virtual:a7417c6700965777525d32507ff2ceaf152fa9a6ed11ad349a820158cb15c986bc22dd3d4b15fa47119ae773847e3b05f3425d23beef37eead4149e9f9e57e1e#npm:3.4.0"],\
           ["@docusaurus/preset-classic", "virtual:a7417c6700965777525d32507ff2ceaf152fa9a6ed11ad349a820158cb15c986bc22dd3d4b15fa47119ae773847e3b05f3425d23beef37eead4149e9f9e57e1e#npm:3.4.0"],\
