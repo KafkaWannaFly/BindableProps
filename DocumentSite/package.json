@@ -15,7 +15,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@babel/runtime": "^7.24.7",
+    "@babel/runtime": "^7.26.10",
     "@docusaurus/core": "^3.4.0",
     "@docusaurus/preset-classic": "^3.4.0",
     "@docusaurus/theme-classic": "^3.4.0",
