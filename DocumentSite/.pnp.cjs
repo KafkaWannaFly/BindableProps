@@ -3261,7 +3261,7 @@ const RAW_RUNTIME_STATE =
           ["estree-util-value-to-estree", "npm:3.1.1"],\
           ["file-loader", "virtual:6d1bb6bb544b265430ccd91c47c305a4cbfb814e33ba1c87645f6d2eb1b1fe15cd90fd95f52c71a180f3b846ba7f9fe629dfcb0ffc34d8ebf728bd0c75c55547#npm:6.2.0"],\
           ["fs-extra", "npm:11.2.0"],\
-          ["image-size", "npm:1.1.1"],\
+          ["image-size", "npm:1.2.1"],\
           ["mdast-util-mdx", "npm:3.0.0"],\
           ["mdast-util-to-string", "npm:4.0.0"],\
           ["react", "npm:18.3.1"],\
@@ -9501,10 +9501,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["image-size", [\
-      ["npm:1.1.1", {\
-        "packageLocation": "../../../.yarn/berry/cache/image-size-npm-1.1.1-4e6d664667-10c0.zip/node_modules/image-size/",\
+      ["npm:1.2.1", {\
+        "packageLocation": "../../../.yarn/berry/cache/image-size-npm-1.2.1-e285f3c080-10c0.zip/node_modules/image-size/",\
         "packageDependencies": [\
-          ["image-size", "npm:1.1.1"],\
+          ["image-size", "npm:1.2.1"],\
           ["queue", "npm:6.0.2"]\
         ],\
         "linkType": "HARD"\
