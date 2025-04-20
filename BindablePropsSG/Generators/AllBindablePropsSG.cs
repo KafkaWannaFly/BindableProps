@@ -10,7 +10,6 @@ namespace BindablePropsSG.Generators
 {
     [Generator]
     [SuppressMessage("ReSharper", "InconsistentNaming")]
-    [SuppressMessage("ReSharper", "HeapView.BoxingAllocation")]
     public class AllBindablePropsSG : BaseGenerator
     {
         private readonly HashSet<string> ignoredAttributes =

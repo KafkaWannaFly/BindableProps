@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using BindablePropsSG.Utils;
 using Microsoft.CodeAnalysis;
@@ -9,7 +8,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace BindablePropsSG.Generators;
 
 [Generator]
-[SuppressMessage("ReSharper", "HeapView.BoxingAllocation")]
 public class BaseGenerator : IIncrementalGenerator
 {
     public virtual void Initialize(IncrementalGeneratorInitializationContext context)

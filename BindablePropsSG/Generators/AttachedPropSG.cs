@@ -8,7 +8,6 @@ namespace BindablePropsSG.Generators;
 
 [Generator]
 [SuppressMessage("ReSharper", "InconsistentNaming")]
-[SuppressMessage("ReSharper", "HeapView.BoxingAllocation")]
 public class AttachedPropSG : BaseGenerator
 {
     protected override IEnumerable<string> TargetAttributes =>
