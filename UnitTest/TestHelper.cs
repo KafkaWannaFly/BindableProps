@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace UnitTest
 {
-    internal static class TestHelper
+    internal static partial class TestHelper
     {
         public static string? GetGeneratedOutput(string sourceCode, IIncrementalGenerator generator)
         {
@@ -16,7 +16,7 @@ namespace UnitTest
                                       .Cast<MetadataReference>();
 
             var compilation = CSharpCompilation.Create("SourceGeneratorTests",
-                          new[] { syntaxTree },
+                                                       [syntaxTree],
                           references,
                           new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
@@ -34,7 +34,10 @@ namespace UnitTest
         
         public static string RemoveAllWhiteSpace(string content)
         {
-            return Regex.Replace(content, @"\s+", string.Empty);
+            return MyRegex().Replace(content, string.Empty);
         }
+
+        [GeneratedRegex(@"\s+")]
+        private static partial Regex MyRegex();
     }
 }

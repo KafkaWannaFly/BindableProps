@@ -8,14 +8,13 @@ namespace BindablePropsSG.Generators;
 
 [Generator]
 [SuppressMessage("ReSharper", "InconsistentNaming")]
-[SuppressMessage("ReSharper", "HeapView.BoxingAllocation")]
 public class AttachedPropSG : BaseGenerator
 {
-    protected override IEnumerable<string> TargetAttributes => new[]
-    {
+    protected override IEnumerable<string> TargetAttributes =>
+    [
         "AttachedProp",
         "AttachedPropAttribute"
-    };
+    ];
 
     protected override void ProcessField(StringBuilder source, TypeDeclarationSyntax typeDeclarationSyntax,
         SyntaxNode syntaxNode,
@@ -36,29 +35,31 @@ public class AttachedPropSG : BaseGenerator
             bindablePropParam.PropertyChangedDelegate = "null";
         }
 
-        source.Append($@"
-        public {bindablePropParam.NewKeyWord} static readonly BindableProperty {bindablePropParam.PropName}Property = BindableProperty.CreateAttached(
-            ""{bindablePropParam.PropName}"",
-            typeof({bindablePropParam.UnNullableFieldType}),
-            typeof({bindablePropParam.ClassType}),
-            {bindablePropParam.DefaultValue},
-            (BindingMode){bindablePropParam.BindingMode},
-            {bindablePropParam.ValidateValueDelegate},
-            {bindablePropParam.PropertyChangedDelegate},
-            {bindablePropParam.PropertyChangingDelegate},
-            {bindablePropParam.CoerceValueDelegate},
-            {bindablePropParam.CreateDefaultValueDelegate}
-        );
+        source.Append($$"""
 
-        public {bindablePropParam.NewKeyWord} static {bindablePropParam.FieldType} Get{bindablePropParam.PropName}(BindableObject view)
-        {{
-            return ({bindablePropParam.FieldType})view.GetValue({bindablePropParam.PropName}Property);
-        }}
+                                public {{bindablePropParam.NewKeyWord}} static readonly BindableProperty {{bindablePropParam.PropName}}Property = BindableProperty.CreateAttached(
+                                    "{{bindablePropParam.PropName}}",
+                                    typeof({{bindablePropParam.UnNullableFieldType}}),
+                                    typeof({{bindablePropParam.ClassType}}),
+                                    {{bindablePropParam.DefaultValue}},
+                                    (BindingMode){{bindablePropParam.BindingMode}},
+                                    {{bindablePropParam.ValidateValueDelegate}},
+                                    {{bindablePropParam.PropertyChangedDelegate}},
+                                    {{bindablePropParam.PropertyChangingDelegate}},
+                                    {{bindablePropParam.CoerceValueDelegate}},
+                                    {{bindablePropParam.CreateDefaultValueDelegate}}
+                                );
 
-        {bindablePropParam.NewKeyWord} public static void Set{bindablePropParam.PropName}(BindableObject view, {bindablePropParam.FieldType} value)
-        {{
-            view.SetValue({bindablePropParam.PropName}Property, value);
-        }}
-");
+                                public {{bindablePropParam.NewKeyWord}} static {{bindablePropParam.FieldType}} Get{{bindablePropParam.PropName}}(BindableObject view)
+                                {
+                                    return ({{bindablePropParam.FieldType}})view.GetValue({{bindablePropParam.PropName}}Property);
+                                }
+
+                                {{bindablePropParam.NewKeyWord}} public static void Set{{bindablePropParam.PropName}}(BindableObject view, {{bindablePropParam.FieldType}} value)
+                                {
+                                    view.SetValue({{bindablePropParam.PropName}}Property, value);
+                                }
+
+                        """);
     }
 }
