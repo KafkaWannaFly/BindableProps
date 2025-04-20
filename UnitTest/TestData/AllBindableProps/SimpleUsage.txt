@@ -1,4 +1,12 @@
-﻿[AllBindableProps]
+﻿using BindableProps;
+#if WINDOWS
+using Microsoft.UI.Xaml;
+#endif
+#if __ANDROID__
+using Microsoft.UI.Xaml.Controls;
+#endif
+
+[AllBindableProps]
 public partial class MyClass
 {
     // Default field

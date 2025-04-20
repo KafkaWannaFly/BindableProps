@@ -1,11 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Text;
+﻿using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace BindablePropsSG.Utils
 {
-    [SuppressMessage("ReSharper", "HeapView.BoxingAllocation")]
     public static class SyntaxUtil
     {
         public static string? ExtractName(NameSyntax? name)

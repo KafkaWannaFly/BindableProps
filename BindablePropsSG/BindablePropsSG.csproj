@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<LangVersion>10.0</LangVersion>
+		<LangVersion>latestmajor</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
@@ -10,12 +10,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.12.0-beta1.25155.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<!--		Keep this version to be compatible-->
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.13.0" PrivateAssets="all" />
 
 		<None Include="..\LICENSE.txt">
 			<Pack>True</Pack>
