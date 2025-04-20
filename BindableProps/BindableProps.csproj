@@ -44,9 +44,4 @@
     <ItemGroup Label="Package">
         <None Include="..\BindablePropsSG\bin\$(Configuration)\netstandard2.0\BindablePropsSG.dll" PackagePath="analyzers\dotnet\cs" Pack="true" Visible="false"/>
     </ItemGroup>
-
-    <PropertyGroup Condition="$([MSBuild]::VersionGreaterThanOrEquals('$(TargetFramework)', 'net7.0'))">
-        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
-        <IsTrimmable>true</IsTrimmable>
-    </PropertyGroup>
 </Project>
