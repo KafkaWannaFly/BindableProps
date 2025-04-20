@@ -90,7 +90,9 @@ namespace BindablePropsSG.Generators
             if (typeDeclarationSyntax is null || !syntaxSymbols.Any())
                 return string.Empty;
 
-            var usingDirectives = typeDeclarationSyntax.SyntaxTree.GetCompilationUnitRoot().Usings;
+            var excludedUsings = typeDeclarationSyntax.SyntaxTree.GetCompilationUnitRoot().Members.ToString();
+            var allCode = typeDeclarationSyntax.SyntaxTree.ToString();
+            var usingDirectives = allCode.Replace(excludedUsings, string.Empty);
 
             var namespaceSyntax = typeDeclarationSyntax.Parent as BaseNamespaceDeclarationSyntax;
             var namespaceName = namespaceSyntax?.Name.ToString() ?? "global";

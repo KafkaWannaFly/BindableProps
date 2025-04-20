@@ -59,7 +59,7 @@ public class BaseGenerator : IIncrementalGenerator
     {
         if (syntaxSymbols.IsDefaultOrEmpty)
             return;
-        
+
         var groupList = syntaxSymbols.GroupBy<(SyntaxNode, ISymbol), TypeDeclarationSyntax>(
             fieldGroup => (TypeDeclarationSyntax)fieldGroup.Item1!.Parent!
         );
@@ -81,7 +81,9 @@ public class BaseGenerator : IIncrementalGenerator
             return string.Empty;
         }
 
-        var usingDirectives = typeDeclarationSyntax.SyntaxTree.GetCompilationUnitRoot().Usings;
+        var excludedUsings = typeDeclarationSyntax.SyntaxTree.GetCompilationUnitRoot().Members.ToString();
+        var allCode = typeDeclarationSyntax.SyntaxTree.ToString();
+        var usingDirectives = allCode.Replace(excludedUsings, string.Empty);
 
         var namespaceSyntax = typeDeclarationSyntax.Parent as BaseNamespaceDeclarationSyntax;
         var namespaceName = namespaceSyntax?.Name.ToString() ?? "global";
@@ -95,7 +97,7 @@ public class BaseGenerator : IIncrementalGenerator
             )
             .Select(modifier => modifier.Text);
         var accessLevel = string.Join(" ", accessLevelKeyWords);
-            
+
 
         var source = new StringBuilder($$"""
 
