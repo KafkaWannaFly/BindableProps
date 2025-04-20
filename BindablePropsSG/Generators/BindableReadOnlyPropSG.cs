@@ -10,11 +10,11 @@ namespace BindablePropsSG.Generators;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public class BindableReadOnlyPropSG : BaseGenerator
 {
-    protected override IEnumerable<string> TargetAttributes => new[]
-    {
+    protected override IEnumerable<string> TargetAttributes =>
+    [
         "BindableReadOnlyProp",
         "BindableReadOnlyPropAttribute"
-    };
+    ];
 
     protected override void ProcessField(
         StringBuilder source,
@@ -34,35 +34,37 @@ public class BindableReadOnlyPropSG : BaseGenerator
 
         bindablePropParam.BindingMode = defaultBindingMode;
 
-        source.Append($@"
-        public {bindablePropParam.NewKeyWord} static readonly BindablePropertyKey {bindablePropParam.PropName}PropertyKey = BindableProperty.CreateReadOnly(
-            nameof({bindablePropParam.PropName}),
-            typeof({bindablePropParam.UnNullableFieldType}),
-            typeof({bindablePropParam.ClassType}),
-            {bindablePropParam.DefaultValue},
-            (BindingMode){bindablePropParam.BindingMode},
-            {bindablePropParam.ValidateValueDelegate},
-            {bindablePropParam.PropertyChangedDelegate},
-            {bindablePropParam.PropertyChangingDelegate},
-            {bindablePropParam.CoerceValueDelegate},
-            {bindablePropParam.CreateDefaultValueDelegate}
-        );
+        source.Append($$"""
 
-        public {bindablePropParam.NewKeyWord} static readonly BindableProperty {bindablePropParam.PropName}Property = {bindablePropParam.PropName}PropertyKey.BindableProperty;
+                                public {{bindablePropParam.NewKeyWord}} static readonly BindablePropertyKey {{bindablePropParam.PropName}}PropertyKey = BindableProperty.CreateReadOnly(
+                                    nameof({{bindablePropParam.PropName}}),
+                                    typeof({{bindablePropParam.UnNullableFieldType}}),
+                                    typeof({{bindablePropParam.ClassType}}),
+                                    {{bindablePropParam.DefaultValue}},
+                                    (BindingMode){{bindablePropParam.BindingMode}},
+                                    {{bindablePropParam.ValidateValueDelegate}},
+                                    {{bindablePropParam.PropertyChangedDelegate}},
+                                    {{bindablePropParam.PropertyChangingDelegate}},
+                                    {{bindablePropParam.CoerceValueDelegate}},
+                                    {{bindablePropParam.CreateDefaultValueDelegate}}
+                                );
 
-        public {bindablePropParam.NewKeyWord} {bindablePropParam.FieldType} {bindablePropParam.PropName}
-        {{
-            get => {bindablePropParam.FieldName};
-            private set 
-            {{ 
-                OnPropertyChanging(nameof({bindablePropParam.PropName}));
+                                public {{bindablePropParam.NewKeyWord}} static readonly BindableProperty {{bindablePropParam.PropName}}Property = {{bindablePropParam.PropName}}PropertyKey.BindableProperty;
 
-                {bindablePropParam.FieldName} = value;
-                SetValue({bindablePropParam.ClassType}.{bindablePropParam.PropName}PropertyKey, {bindablePropParam.FieldName});
+                                public {{bindablePropParam.NewKeyWord}} {{bindablePropParam.FieldType}} {{bindablePropParam.PropName}}
+                                {
+                                    get => {{bindablePropParam.FieldName}};
+                                    private set 
+                                    { 
+                                        OnPropertyChanging(nameof({{bindablePropParam.PropName}}));
 
-                OnPropertyChanged(nameof({bindablePropParam.PropName}));
-            }}
-        }}
-");
+                                        {{bindablePropParam.FieldName}} = value;
+                                        SetValue({{bindablePropParam.ClassType}}.{{bindablePropParam.PropName}}PropertyKey, {{bindablePropParam.FieldName}});
+
+                                        OnPropertyChanged(nameof({{bindablePropParam.PropName}}));
+                                    }
+                                }
+
+                        """);
     }
 }

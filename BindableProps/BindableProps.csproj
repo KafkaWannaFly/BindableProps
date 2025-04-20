@@ -11,7 +11,7 @@
         <Description>Auto generate boilerplate code when declaring BindableProperty</Description>
         <Copyright>MIT</Copyright>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-        <PackageTags>source-generator;maui;net-standard;net-6;net-7;net-8;utility;helper</PackageTags>
+        <PackageTags>source-generator;maui;net-standard;net-6;net-7;net-8;net-9;utility;helper</PackageTags>
         <PackageProjectUrl>https://github.com/KafkaWannaFly/BindableProps</PackageProjectUrl>
         <Version>1.4.3</Version>
         <RepositoryUrl>https://github.com/KafkaWannaFly/BindableProps</RepositoryUrl>
