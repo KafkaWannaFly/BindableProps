@@ -27,7 +27,7 @@ namespace BindablePropsSG.Generators
 
                                     public {{bindablePropParam.NewKeyWord}} static readonly BindableProperty {{bindablePropParam.PropName}}Property = BindableProperty.Create(
                                         nameof({{bindablePropParam.PropName}}),
-                                        typeof({{bindablePropParam.UnNullableFieldType}}),
+                                        typeof({{bindablePropParam.FieldType}}),
                                         typeof({{bindablePropParam.ClassType}}),
                                         {{bindablePropParam.DefaultValue}},
                                         (BindingMode){{bindablePropParam.BindingMode}},

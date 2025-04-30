@@ -71,7 +71,7 @@ namespace UnitTest.TestData.BindablePropTest
         
         public static readonly BindableProperty SideNoteProperty = BindableProperty.Create(
                     nameof(SideNote),
-                    typeof(string),
+                    typeof(string?),
                     typeof(SimpleUsage),
                     default,
                     (BindingMode)0,
