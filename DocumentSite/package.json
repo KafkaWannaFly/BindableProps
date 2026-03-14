@@ -15,27 +15,27 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@babel/runtime": "^7.28.3",
-    "@docusaurus/core": "^3.8.1",
-    "@docusaurus/preset-classic": "^3.8.1",
-    "@docusaurus/theme-classic": "^3.8.1",
-    "@mdx-js/react": "^3.1.0",
-    "antd": "^5.27.0",
+    "@babel/runtime": "^7.28.6",
+    "@docusaurus/core": "^3.9.2",
+    "@docusaurus/preset-classic": "^3.9.2",
+    "@docusaurus/theme-classic": "^3.9.2",
+    "@mdx-js/react": "^3.1.1",
+    "antd": "^6.3.2",
     "clsx": "^2.1.1",
     "prism-react-renderer": "^2.4.1",
     "prop-types": "^15.8.1",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "react-type-animation": "^3.2.0"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "^3.8.1",
-    "@docusaurus/tsconfig": "^3.8.1",
-    "@docusaurus/types": "^3.8.1",
-    "@tsconfig/docusaurus": "^2.0.3",
+    "@docusaurus/module-type-aliases": "^3.9.2",
+    "@docusaurus/tsconfig": "^3.9.2",
+    "@docusaurus/types": "^3.9.2",
+    "@tsconfig/docusaurus": "^2.0.9",
     "@types/prop-types": "^15.7.15",
-    "@types/react": "^19.1.10",
-    "typescript": "^5.9.2"
+    "@types/react": "^19.2.14",
+    "typescript": "^5.9.3"
   },
   "browserslist": {
     "production": [
