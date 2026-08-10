@@ -11,7 +11,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up DotNet
         uses: actions/setup-dotnet@v6
@@ -39,7 +39,7 @@ jobs:
     name: Build, Pack & Publish
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Publish
       - name: Publish
