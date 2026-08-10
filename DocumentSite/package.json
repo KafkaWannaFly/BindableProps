@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.10.2",
-    "@docusaurus/tsconfig": "^3.9.2",
+    "@docusaurus/tsconfig": "^3.10.2",
     "@docusaurus/types": "^3.10.2",
     "@tsconfig/docusaurus": "^2.0.9",
     "@types/prop-types": "^15.7.15",
