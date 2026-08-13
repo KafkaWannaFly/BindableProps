@@ -73,8 +73,8 @@ importers:
         specifier: ^3.10.2
         version: 3.10.2(postcss@8.5.26)(react-dom@19.2.4(react@19.2.8))(react@19.2.8)
       '@docusaurus/tsconfig':
-        specifier: ^3.9.2
-        version: 3.9.2
+        specifier: ^3.10.2
+        version: 3.10.2
       '@docusaurus/types':
         specifier: ^3.10.2
         version: 3.10.2(clean-css@5.3.3)(cssnano@6.1.2(postcss@8.5.26))(html-minifier-terser@7.2.0)(postcss@8.5.26)(react-dom@19.2.4(react@19.2.8))(react@19.2.8)
@@ -1430,8 +1430,8 @@ packages:
     resolution: {integrity: sha512-vIryvpP18ON9T9rjgMRFLr2xJVDpw1rtagEGf8Ccce4CkTrvM/fRB8N2nyWYOW5u3DdjkwKw5fBa+3tbn9P4PA==}
     engines: {node: '>=20.0'}
 
-  '@docusaurus/tsconfig@3.9.2':
-    resolution: {integrity: sha512-j6/Fp4Rlpxsc632cnRnl5HpOWeb6ZKssDj6/XzzAzVGXXfm9Eptx3rxCC+fDzySn9fHTS+CWJjPineCR1bB5WQ==}
+  '@docusaurus/tsconfig@3.10.2':
+    resolution: {integrity: sha512-5GiB7h/nFsMFPO9mCqcRNE1yA5TSXXNCshNIgHPL6fCPOjcTDixs6qjQBu8ddkgPcicwCvOA7n3jeK2rGdJk6g==}
 
   '@docusaurus/types@3.10.2':
     resolution: {integrity: sha512-B6rvfwIFSapUqUJjMriZswX13K8l5Z7AcmVE6uTEJpYddQieSTR12DsGaFtcZAIDsQd4p+0WTl0Vc6jmZK0Trw==}
@@ -8322,7 +8322,7 @@ snapshots:
       fs-extra: 11.4.0
       tslib: 2.8.1
 
-  '@docusaurus/tsconfig@3.9.2': {}
+  '@docusaurus/tsconfig@3.10.2': {}
 
   '@docusaurus/types@3.10.2(clean-css@5.3.3)(cssnano@6.1.2(postcss@8.5.26))(html-minifier-terser@7.2.0)(postcss@8.5.26)(react-dom@19.2.4(react@19.2.8))(react@19.2.8)':
     dependencies:
