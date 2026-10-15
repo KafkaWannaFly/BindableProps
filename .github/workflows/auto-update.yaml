@@ -1,27 +1,28 @@
-name: "Dependabot Automerge - Action"
+name: "Dependabot Automerge"
 
 on:
   pull_request_target:
 
-jobs:
-  worker:
-    runs-on: ubuntu-latest
+permissions:
+  pull-requests: write
+  contents: write
 
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
     steps:
-      - name: 'Wait for status checks'
-        id: waitforstatuschecks
-        uses: WyriHaximus/github-action-wait-for-status@v1.8
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
         with:
-          ignoreActions: worker,WIP,Automerge PRs
-          checkInterval: 37
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 'Automerge'
-        uses: pascalgn/automerge-action@v0.16.4
-        if: steps.waitforstatuschecks.outputs.status == 'success'
+      # Auto-merge patch + minor updates only. Major updates stay open for manual review.
+      # To also auto-merge major, add: || steps.metadata.outputs.update-type == 'version-update:semver-major'
+      - name: Enable auto-merge for patch and minor updates
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr merge --auto --merge --delete-branch "$PR_URL" || gh pr merge --merge --delete-branch "$PR_URL"
         env:
-          MERGE_LABELS: "dependencies"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MERGE_DELETE_BRANCH: true
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
